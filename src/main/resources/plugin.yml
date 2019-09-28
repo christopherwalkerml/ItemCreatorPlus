@@ -1,0 +1,25 @@
+name: ItemCreatorPlus
+version: 1.4.0
+author: Darkolythe
+main: me.darkolythe.itemcreatorplus.ItemCreatorPlus
+api-version: 1.13
+description: This plugin allows easy creation of custom items with potion effects, attributes, and more, all in a simple GUI.
+
+commands:
+  itemcreatorplus:
+    usage: /<command>
+    aliases: [icp]
+    description: the itemcreatorplus base command
+    permission: itemcreatorplus.command
+    permission-message: You do not have permission!
+
+permissions:
+  itemcreatorplus.command:
+    description: basic command permission
+    default: op
+  itemcreatorplus.savemenu:
+    description: lets the player open up the list of saved items and create copies at will
+    default: op
+  itemcreatorplus.giveitem:
+    description: gives the user the permission to give ICP items to certain players (can be used in console)
+    default: op
