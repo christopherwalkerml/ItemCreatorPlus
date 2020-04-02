@@ -336,13 +336,13 @@ public class ItemCreatorListener implements Listener {
                 if (!event.getMessage().equals("cancel")) {
                     ItemMeta meta = item.getItemMeta();
                     if (main.itemmain.catchType.get(player).equals("name")) {
-                        meta.setDisplayName(event.getMessage());
+                        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
                     } else if (main.itemmain.catchType.get(player).equals("lore")) {
-                        meta.setLore(addLore(meta, event.getMessage(), false));
+                        meta.setLore(addLore(meta, ChatColor.translateAlternateColorCodes('&', event.getMessage()), false));
                     }
                     item.setItemMeta(meta);
                 }
-                main.itemmain.toOpen.put(player, event.getMessage());
+                main.itemmain.toOpen.put(player, ChatColor.translateAlternateColorCodes('&', event.getMessage()));
                 main.itemmain.catchChat.put(player, item);
             } else {
                 return;
