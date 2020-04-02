@@ -6,12 +6,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -100,6 +102,43 @@ public class ItemEffectListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             checkForUpdateDelayed(event.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onEntityHit(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
+            Player player = (Player) event.getDamager();
+            LivingEntity entity = (LivingEntity) event.getEntity();
+
+            Map<Integer, ItemStack> slots = new HashMap<>();
+            addArmour(slots, player);
+            slots.put(0, player.getInventory().getItemInMainHand());
+
+            for (int index: slots.keySet()) {
+                ItemStack item = slots.get(index);
+                if (item != null) {
+                    if (item.hasItemMeta()) {
+                        if (item.getItemMeta().hasLore()) {
+                            List<String> lore = item.getItemMeta().getLore();
+                            for (String l : lore) {
+                                if (l.contains(ChatColor.RED + "-")) {
+                                    int level = Integer.parseInt(l.replace(ChatColor.RED.toString(), "").replace(ChatColor.GRAY.toString(), "").replaceAll("([^0-9 ])", "").trim());
+                                    String estr = l.replace(ChatColor.RED.toString(), "").replaceAll("([^A-z ])", "").trim();
+
+                                    for (PotionEffectType effect: PotionEffectType.values()) {
+                                        if (estr.equals(WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")))) {
+                                            PotionEffect pe = new PotionEffect(effect, 60, level - 1, false, true, false);
+                                            entity.addPotionEffect(pe);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

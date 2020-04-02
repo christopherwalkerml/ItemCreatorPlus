@@ -4,6 +4,7 @@ import me.darkolythe.itemcreatorplus.ItemCreatorPlus;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -13,6 +14,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.material.MaterialData;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
@@ -220,15 +224,35 @@ public class ItemCreatorGUI {
             if (effect != null) {
                 ItemStack i = new ItemStack(Material.GLASS_BOTTLE, 1);
                 ItemMeta m = i.getItemMeta();
-                m.setLore(Arrays.asList(ChatColor.GOLD + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")), "", ChatColor.GRAY + "Left click to increase by 1", ChatColor.GRAY + "Right click to decrease by 1"));
+                m.setLore(Arrays.asList(ChatColor.GOLD + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")), "",
+                        ChatColor.GRAY + "Left click to increase by 1", ChatColor.GRAY + "Right click to decrease by 1",
+                        ChatColor.GRAY + "Shift left click to increase enemy by 1", ChatColor.GRAY + "Shift right click to decrease enemy by 1"));
                 i.setItemMeta(m);
                 String enchant = m.getLore().get(0).replace(ChatColor.GOLD.toString(), ChatColor.GRAY.toString());
                 if (item.hasItemMeta()) {
                     if (item.getItemMeta().hasLore()) {
                         for (String l : item.getItemMeta().getLore()) {
-                            if (l.contains(enchant)) {
-                                i.setAmount(Integer.parseInt(l.replace(ChatColor.GRAY.toString(), "").replaceAll("\\D", "")));
-                                i.setType(Material.POTION);
+                            if (enchant.replace(ChatColor.GRAY.toString(), "").trim().equals(
+                                    l.replace(ChatColor.RED.toString(), "").replaceAll("([^A-z ])", "").trim())) {
+                                if (!l.contains(ChatColor.RED + "-")) {
+                                    ItemMeta im = i.getItemMeta();
+                                    im.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                                    im.setLore(main.itemcreatorlistener.addLore(im, ChatColor.GREEN + "Player level: " + l.replace(ChatColor.GRAY.toString(), "").replaceAll("\\D", ""), 1));
+                                    i.setItemMeta(im);
+                                    i.setType(Material.POTION);
+                                    PotionMeta pm = (PotionMeta) i.getItemMeta();
+                                    pm.setColor(Color.RED);
+                                    i.setItemMeta(pm);
+                                } else {
+                                    ItemMeta im = i.getItemMeta();
+                                    im.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                                    im.setLore(main.itemcreatorlistener.addLore(im, ChatColor.GREEN + "Enemy level: " + l.replace(ChatColor.GRAY.toString(), "").replaceAll("\\D", ""), 1));
+                                    i.setItemMeta(im);
+                                    i.setType(Material.POTION);
+                                    PotionMeta pm = (PotionMeta) i.getItemMeta();
+                                    pm.setColor(Color.BLUE);
+                                    i.setItemMeta(pm);
+                                }
                             }
                         }
                     }

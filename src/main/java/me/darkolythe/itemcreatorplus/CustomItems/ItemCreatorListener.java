@@ -211,19 +211,28 @@ public class ItemCreatorListener implements Listener {
                             if (item.hasItemMeta()) {
                                 ItemMeta itemmeta = item.getItemMeta();
                                 String enchant = itemmeta.getLore().get(0).replace(ChatColor.GOLD.toString(), ChatColor.GRAY.toString());
-                                System.out.println(enchant);
                                 List<String> lore = new ArrayList<>();
                                 ItemMeta pmeta = pitem.getItemMeta();
                                 if (pmeta != null) {
                                     if (pmeta.hasLore()) {
                                         for (String l : pmeta.getLore()) {
-                                            if (l.contains(enchant)) {
-                                                int level = Integer.parseInt(l.replace(enchant + " ", ""));
+                                            String enchantClear = enchant.replace(ChatColor.GRAY.toString(), "").trim();
+                                            String loreClear = l.replace(ChatColor.RED.toString(), "").replaceAll("([^A-z ])", "").trim();
+                                            if (enchantClear.equals(loreClear) && ((event.isShiftClick() && l.contains("-")) || (!event.isShiftClick() && !l.contains("-")))) {
+                                                int level = Integer.parseInt(l.replace(ChatColor.RED.toString(), "").replace(ChatColor.GRAY.toString(), "").replaceAll("([^0-9 ])", "").trim());
                                                 if (event.isLeftClick()) {
-                                                    lore.add(enchant + " " + (level + 1));
+                                                    if (event.isShiftClick()) {
+                                                        lore.add(ChatColor.RED + "- " + enchant + " " + (level + 1));
+                                                    } else {
+                                                        lore.add(enchant + " " + (level + 1));
+                                                    }
                                                 } else if (event.isRightClick()) {
                                                     if (level - 1 > 0) {
-                                                        lore.add(enchant + " " + (level - 1));
+                                                        if (event.isShiftClick()) {
+                                                            lore.add(ChatColor.RED + "- " + enchant + " " + (level - 1));
+                                                        } else {
+                                                            lore.add(enchant + " " + (level - 1));
+                                                        }
                                                     }
                                                 }
                                                 contains = true;
@@ -236,7 +245,11 @@ public class ItemCreatorListener implements Listener {
                                 if (!contains) {
                                     List<String> newlore = new ArrayList<>();
                                     if (event.isLeftClick()) {
-                                        newlore.add(enchant + " " + 1);
+                                        if (event.isShiftClick()) {
+                                            lore.add(ChatColor.RED + "- " + enchant + " " + 1);
+                                        } else {
+                                            lore.add(enchant + " " + 1);
+                                        }
                                     }
                                     for (String l : lore) {
                                         newlore.add(l);
@@ -338,7 +351,7 @@ public class ItemCreatorListener implements Listener {
                     if (main.itemmain.catchType.get(player).equals("name")) {
                         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
                     } else if (main.itemmain.catchType.get(player).equals("lore")) {
-                        meta.setLore(addLore(meta, ChatColor.translateAlternateColorCodes('&', event.getMessage()), false));
+                        meta.setLore(addLore(meta, ChatColor.translateAlternateColorCodes('&', event.getMessage()), -1));
                     }
                     item.setItemMeta(meta);
                 }
@@ -371,7 +384,7 @@ public class ItemCreatorListener implements Listener {
                     pmeta.addAttributeModifier(at, new AttributeModifier(UUID.randomUUID(), at.name(), am.getAmount() + amount, operation, es));
                     pmeta.setLore(removeLoreLine(pmeta.getLore(), WordUtils.capitalize(esname + at.name().replace("GENERIC_", "").toLowerCase().replace("_", " "))));
                     if (am.getAmount() + amount < -0.09 || am.getAmount() + amount > 0.09) {
-                        pmeta.setLore(addLore(pmeta, ChatColor.BLUE + WordUtils.capitalize(esname + at.name().replace("GENERIC_", "").toLowerCase().replace("_", " ")) + " " + Math.round((am.getAmount() + amount) * 10) / 10.0, true));
+                        pmeta.setLore(addLore(pmeta, ChatColor.BLUE + WordUtils.capitalize(esname + at.name().replace("GENERIC_", "").toLowerCase().replace("_", " ")) + " " + Math.round((am.getAmount() + amount) * 10) / 10.0, 0));
                     } else {
                         pmeta.removeAttributeModifier(at, am);
                     }
@@ -382,7 +395,7 @@ public class ItemCreatorListener implements Listener {
         }
         pmeta.addAttributeModifier(at, new AttributeModifier(UUID.randomUUID(), at.name(), amount, operation, es));
         pmeta.setLore(removeLoreLine(pmeta.getLore(), WordUtils.capitalize(esname + at.name().replace("GENERIC_", "").toLowerCase()).replace("_", " ")));
-        pmeta.setLore(addLore(pmeta, ChatColor.BLUE + WordUtils.capitalize(esname + at.name().replace("GENERIC_", "").toLowerCase().replace("_", " ")) + " " + Math.round(amount * 10) / 10.0, true));
+        pmeta.setLore(addLore(pmeta, ChatColor.BLUE + WordUtils.capitalize(esname + at.name().replace("GENERIC_", "").toLowerCase().replace("_", " ")) + " " + Math.round(amount * 10) / 10.0, 0));
         pitem.setItemMeta(pmeta);
     }
 
@@ -400,25 +413,30 @@ public class ItemCreatorListener implements Listener {
         return lore;
     }
 
-    public List<String> addLore(ItemMeta meta, String line, boolean top) {
+    public List<String> addLore(ItemMeta meta, String line, int level) {
         List<String> newlore = new ArrayList<>();
-        if (!top) {
-            if (meta.hasLore()) {
-                newlore = meta.getLore();
-            } else {
-                newlore = new ArrayList<>();
+
+        if (level == -1) {
+            List<String> lore = meta.getLore();
+            if (lore != null) {
+                newlore.addAll(lore);
             }
             newlore.add(line);
-        } else {
-            if (meta.hasLore()) {
-                List<String> lore = meta.getLore();
-                newlore.add(line);
-                for (String str : lore) {
-                    newlore.add(str);
+            return newlore;
+        }
+
+        if (meta.hasLore()) {
+            int index = 0;
+            List<String> lore = meta.getLore();
+            for (String str : lore) {
+                if (index == level) {
+                    newlore.add(line);
                 }
-            } else {
-                newlore.add(line);
+                index++;
+                newlore.add(str);
             }
+        } else {
+            newlore.add(line);
         }
         return newlore;
     }
