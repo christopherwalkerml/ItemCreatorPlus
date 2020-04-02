@@ -206,11 +206,12 @@ public class ItemCreatorListener implements Listener {
                     } else if (title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Potion Effects GUI")) {
                         event.setCancelled(true);
                         pitem = event.getInventory().getItem(40);
-                        if (event.getSlot() >= 0 && event.getSlot() <= 32) {
+                        if (event.getSlot() >= 0 && event.getSlot() <= event.getInventory().getContents().length - 2) {
                             boolean contains = false;
                             if (item.hasItemMeta()) {
                                 ItemMeta itemmeta = item.getItemMeta();
                                 String enchant = itemmeta.getLore().get(0).replace(ChatColor.GOLD.toString(), ChatColor.GRAY.toString());
+                                System.out.println(enchant);
                                 List<String> lore = new ArrayList<>();
                                 ItemMeta pmeta = pitem.getItemMeta();
                                 if (pmeta != null) {

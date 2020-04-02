@@ -104,6 +104,31 @@ public class ItemEffectListener implements Listener {
     }
 
     @EventHandler
+    public void onXpGain(PlayerExpChangeEvent event) {
+        Player player = event.getPlayer();
+        Map<Integer, ItemStack> slots = new HashMap<>();
+        addArmour(slots, event.getPlayer());
+        slots.put(0, event.getPlayer().getInventory().getItemInMainHand());
+
+        for (int index: slots.keySet()) {
+            ItemStack item = slots.get(index);
+            if (item != null) {
+                if (item.hasItemMeta()) {
+                    if (item.getItemMeta().hasLore()) {
+                        List<String> lore = item.getItemMeta().getLore();
+                        for (String l : lore) {
+                            if (l.contains("XP Boost")) {
+                                int level = Integer.parseInt(l.replace(ChatColor.GRAY.toString() + "XP Boost ", ""));
+                                player.giveExp((int)(event.getAmount() * (0.3 * level)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
     public void onArmourDispense(BlockDispenseArmorEvent event) {
         if (event.getTargetEntity() instanceof Player) {
             checkForUpdateDelayed((Player) event.getTargetEntity());

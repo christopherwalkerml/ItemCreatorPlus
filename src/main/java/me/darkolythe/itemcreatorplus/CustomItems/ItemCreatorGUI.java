@@ -239,9 +239,15 @@ public class ItemCreatorGUI {
         }
         ItemStack i = new ItemStack(Material.FEATHER, 1);
         ItemMeta m = i.getItemMeta();
-        m.setLore(Arrays.asList(ChatColor.GOLD + "Flight", "", ChatColor.GRAY + "Left click to add flight / flight speed", ChatColor.GRAY + "Right click to remove flight / flight speed"));
+        m.setLore(Arrays.asList(ChatColor.GOLD + "Flight", "", ChatColor.GRAY + "Left click to add flight", ChatColor.GRAY + "Right click to remove flight"));
         i.setItemMeta(m);
-        gui.setItem(index, i);
+        gui.setItem(index, i.clone());
+
+        i = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
+        m = i.getItemMeta();
+        m.setLore(Arrays.asList(ChatColor.GOLD + "XP Boost", "", ChatColor.GRAY + "Left click to add xp boost by 1", ChatColor.GRAY + "Right click to remove xp boost by 1"));
+        i.setItemMeta(m);
+        gui.setItem(index + 1, i);
 
         gui.setItem(40, item);
 
