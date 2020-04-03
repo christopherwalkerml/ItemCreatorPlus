@@ -213,25 +213,27 @@ public class ItemEffectListener implements Listener {
                 if (item.hasItemMeta()) {
                     if (item.getItemMeta().hasLore()) {
                         List<String> lore = item.getItemMeta().getLore();
-                        for (String l : lore) {
-                            if (l.contains("Flight")) {
-                                player.setAllowFlight(true);
-                                player.setFlying(isFlying);
-                                main.itemmain.isFlight.put(player, true);
-                            }
-                            for (PotionEffectType effect: PotionEffectType.values()) {
-                                if (l.contains(ChatColor.GRAY.toString() + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")))) {
-                                    if (l.replace(ChatColor.GRAY + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")) + " ", "").replaceAll("\\d", "").equals("")) {
-                                        int level = Integer.parseInt(l.replace(ChatColor.GRAY + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")) + " ", ""));
-                                        int pl = 0;
-                                        for (int j = 0; j < effects.size(); j++) {
-                                            if (effects.get(j).getType() == effect) {
-                                                effects.set(j, new PotionEffect(effect, 1000000000, effects.get(j).getAmplifier() + 1, false, false, false));
+                        if (lore != null) {
+                            for (String l : lore) {
+                                if (l.contains("Flight")) {
+                                    player.setAllowFlight(true);
+                                    player.setFlying(isFlying);
+                                    main.itemmain.isFlight.put(player, true);
+                                }
+                                for (PotionEffectType effect : PotionEffectType.values()) {
+                                    if (l.contains(ChatColor.GRAY.toString() + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")))) {
+                                        if (l.replace(ChatColor.GRAY + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")) + " ", "").replaceAll("\\d", "").equals("")) {
+                                            int level = Integer.parseInt(l.replace(ChatColor.GRAY + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")) + " ", ""));
+                                            int pl = 0;
+                                            for (int j = 0; j < effects.size(); j++) {
+                                                if (effects.get(j).getType() == effect) {
+                                                    effects.set(j, new PotionEffect(effect, 1000000000, effects.get(j).getAmplifier() + 1, false, false, false));
+                                                }
                                             }
+                                            PotionEffect pe = new PotionEffect(effect, 1000000000, level - 1 + pl, false, false, false);
+                                            effects.add(pe);
+                                            break;
                                         }
-                                        PotionEffect pe = new PotionEffect(effect, 1000000000, level - 1 + pl, false, false, false);
-                                        effects.add(pe);
-                                        break;
                                     }
                                 }
                             }
