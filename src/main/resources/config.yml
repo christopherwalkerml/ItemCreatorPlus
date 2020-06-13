@@ -1,1 +1,3 @@
-#no config required. This file is just needed because spigot likes config files
+#this option allows items in ANY inventory slot to affect the player, instead of only armour and hands.
+#NOTE: This may cause/increase lag on your server.
+fullchecking: false

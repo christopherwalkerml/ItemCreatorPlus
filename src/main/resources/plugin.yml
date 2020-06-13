@@ -1,5 +1,5 @@
 name: ItemCreatorPlus
-version: 1.7.1
+version: 1.8.0
 author: Darkolythe
 main: me.darkolythe.itemcreatorplus.ItemCreatorPlus
 api-version: 1.13
@@ -34,6 +34,9 @@ permissions:
     default: op
   itemcreatorplus.saveitem:
     description: allows the user to save custom items
+    default: op
+  itemcreatorplus.deleteitem:
+    description: allows the user to delete custom items
     default: op
   itemcreatorplus.lore:
     description: allows the user to open and use the custom lore section of ICP

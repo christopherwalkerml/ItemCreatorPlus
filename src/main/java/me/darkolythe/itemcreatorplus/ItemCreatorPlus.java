@@ -18,6 +18,7 @@ public final class ItemCreatorPlus extends JavaPlugin {
     public MainTools maintools;
 
     public String prefix = ChatColor.WHITE.toString() + ChatColor.BOLD.toString() + "[" + ChatColor.BLUE.toString() + "ICP" + ChatColor.WHITE.toString() + ChatColor.BOLD.toString() + "] ";
+    public boolean fullchecking;
 
     @Override
     public void onEnable() {
@@ -33,6 +34,8 @@ public final class ItemCreatorPlus extends JavaPlugin {
         itemlist.setUp();
 
         itemlist.importItemList();
+
+        fullchecking = getConfig().getBoolean("fullchecking");
 
         Metrics metrics = new Metrics(plugin);
 
