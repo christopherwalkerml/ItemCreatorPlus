@@ -47,9 +47,11 @@ public class ItemListListener implements Listener {
                             main.maintools.giveItem(player, main.itemlist.itemslist.get(trueslot));
                             event.setCancelled(true);
                         } else if (event.isRightClick()) {
-                            main.itemlist.itemslist.remove(trueslot);
-                            event.setCancelled(true);
-                            main.itemlist.openItemList(player, (byte)0);
+                            if (event.isLeftClick() && !event.isShiftClick() && player.hasPermission("itemcreatorplus.saveitem")) {
+                                main.itemlist.itemslist.remove(trueslot);
+                                event.setCancelled(true);
+                                main.itemlist.openItemList(player, (byte) 0);
+                            }
                         } else if (event.isShiftClick()) {
                             main.itemcreatorgui.getGUI(player, main.itemlist.itemslist.get(trueslot));
                             event.setCancelled(true);
