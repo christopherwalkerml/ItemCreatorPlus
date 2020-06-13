@@ -43,7 +43,7 @@ public class ItemListListener implements Listener {
                             return;
                         }
                         int trueslot = ((page * 45) + event.getRawSlot());
-                        if (event.isLeftClick() && !event.isShiftClick()) {
+                        if (event.isLeftClick() && !event.isShiftClick() && player.hasPermission("itemcreatorplus.createcopy")) {
                             main.maintools.giveItem(player, main.itemlist.itemslist.get(trueslot));
                             event.setCancelled(true);
                         } else if (event.isRightClick()) {

@@ -270,41 +270,61 @@ public class ItemCreatorListener implements Listener {
                         if (item.hasItemMeta()) {
                             ItemMeta itemmeta = item.getItemMeta();
                             if (itemmeta.getDisplayName().equals(ChatColor.DARK_PURPLE + "Status Effects")) {
-                                main.itemcreatorgui.potionEffectsGUI(player, event.getInventory().getItem(22));
+                                if (player.hasPermission("itemcreatorplus.status")) {
+                                    main.itemcreatorgui.potionEffectsGUI(player, event.getInventory().getItem(22));
+                                } else {
+                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
+                                }
                             } else if (itemmeta.getDisplayName().equals(ChatColor.BLUE + "Special Modifiers")) {
-                                main.itemcreatorgui.modifiersGUI(player, event.getInventory().getItem(22));
+                                if (player.hasPermission("itemcreatorplus.specmod")) {
+                                    main.itemcreatorgui.modifiersGUI(player, event.getInventory().getItem(22));
+                                } else {
+                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
+                                }
                             } else if (itemmeta.getDisplayName().equals(ChatColor.BLUE + "Item Lore")) {
-                                if (event.isLeftClick()) {
-                                    main.itemmain.catchChat.put(player, event.getInventory().getItem(22));
-                                    main.itemmain.catchType.put(player, "lore");
-                                    player.closeInventory();
-                                    player.sendMessage(main.prefix + ChatColor.GRAY + "Enter a single line of lore in chat. Type 'cancel' to cancel.");
-                                } else if (event.isRightClick()) {
-                                    ItemStack i = event.getInventory().getItem(22);
-                                    ItemMeta m = i.getItemMeta();
-                                    m.setLore(null);
-                                    i.setItemMeta(m);
+                                if (player.hasPermission("itemcreatorplus.lore")) {
+                                    if (event.isLeftClick()) {
+                                        main.itemmain.catchChat.put(player, event.getInventory().getItem(22));
+                                        main.itemmain.catchType.put(player, "lore");
+                                        player.closeInventory();
+                                        player.sendMessage(main.prefix + ChatColor.GRAY + "Enter a single line of lore in chat. Type 'cancel' to cancel.");
+                                    } else if (event.isRightClick()) {
+                                        ItemStack i = event.getInventory().getItem(22);
+                                        ItemMeta m = i.getItemMeta();
+                                        m.setLore(null);
+                                        i.setItemMeta(m);
+                                    }
+                                } else {
+                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
                                 }
                             } else if (itemmeta.getDisplayName().equals(ChatColor.GOLD + "Item Name")) {
-                                if (event.isLeftClick()) {
-                                    main.itemmain.catchChat.put(player, event.getInventory().getItem(22));
-                                    main.itemmain.catchType.put(player, "name");
-                                    player.closeInventory();
-                                    player.sendMessage(main.prefix + ChatColor.GRAY + "Enter item name in chat. Type 'cancel' to cancel.");
-                                } else if (event.isRightClick()) {
-                                    ItemStack i = event.getInventory().getItem(22);
-                                    ItemMeta m = i.getItemMeta();
-                                    m.setDisplayName(null);
-                                    i.setItemMeta(m);
+                                if (player.hasPermission("itemcreatorplus.name")) {
+                                    if (event.isLeftClick()) {
+                                        main.itemmain.catchChat.put(player, event.getInventory().getItem(22));
+                                        main.itemmain.catchType.put(player, "name");
+                                        player.closeInventory();
+                                        player.sendMessage(main.prefix + ChatColor.GRAY + "Enter item name in chat. Type 'cancel' to cancel.");
+                                    } else if (event.isRightClick()) {
+                                        ItemStack i = event.getInventory().getItem(22);
+                                        ItemMeta m = i.getItemMeta();
+                                        m.setDisplayName(null);
+                                        i.setItemMeta(m);
+                                    }
+                                } else {
+                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
                                 }
                             } else if (itemmeta.getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Item Enchantments")) {
-                                if (event.isLeftClick()) {
-                                    main.itemcreatorgui.enchantGUI(player, event.getInventory().getItem(22));
-                                } else if (event.isRightClick()) {
-                                    ItemStack i = event.getInventory().getItem(22);
-                                    for (Enchantment enchant : i.getEnchantments().keySet()) {
-                                        i.removeEnchantment(enchant);
+                                if (player.hasPermission("itemcreatorplus.enchant")) {
+                                    if (event.isLeftClick()) {
+                                        main.itemcreatorgui.enchantGUI(player, event.getInventory().getItem(22));
+                                    } else if (event.isRightClick()) {
+                                        ItemStack i = event.getInventory().getItem(22);
+                                        for (Enchantment enchant : i.getEnchantments().keySet()) {
+                                            i.removeEnchantment(enchant);
+                                        }
                                     }
+                                } else {
+                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
                                 }
                             } else if (event.getSlot() == 22) {
                                 player.getInventory().setItemInMainHand(item);
@@ -312,9 +332,13 @@ public class ItemCreatorListener implements Listener {
                             }
                         }
                         if (event.getSlot() == 26) {
-                            main.itemlist.itemslist.add(player.getOpenInventory().getTopInventory().getItem(22));
-                            player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
-                            event.setCancelled(true);
+                            if (player.hasPermission("itemcreatorplus.saveitem")) {
+                                main.itemlist.itemslist.add(player.getOpenInventory().getTopInventory().getItem(22));
+                                player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
+                                event.setCancelled(true);
+                            } else {
+                                player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
+                            }
                         }
                         if (event.getSlot() == 22) {
                             player.getInventory().setItemInMainHand(item);
