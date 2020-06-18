@@ -21,8 +21,9 @@ public class CommandHandler implements CommandExecutor {
             if (cmd.getName().equalsIgnoreCase("itemcreatorplus")) { //if the player has permission, and the command is right
                 if (player.hasPermission("itemcreatorplus.command")) {
                     if (args.length == 0) {
-                        main.itemcreatorgui.getGUI(player, player.getInventory().getItemInMainHand());
-                        player.sendMessage(main.prefix + ChatColor.WHITE + "Remember to " + ChatColor.YELLOW.toString() + ChatColor.BOLD.toString() + "click the item in the main menu" + ChatColor.WHITE + " when you're done." + ChatColor.RED.toString() + ChatColor.BOLD.toString() + " Hitting escape will lose the item!");
+                        if (main.itemcreatorgui.getGUI(player, player.getInventory().getItemInMainHand()))
+                            player.sendMessage(main.prefix + ChatColor.WHITE + "Remember to " + ChatColor.YELLOW.toString() + ChatColor.BOLD.toString() + "click the item in the main menu" + ChatColor.WHITE + " when you're done." + ChatColor.RED.toString() + ChatColor.BOLD.toString() + " Hitting escape will lose the item!");
+                        return true;
                     } else if (args.length == 1) {
                         if (args[0].equals("items")) {
                             if (player.hasPermission("itemcreatorplus.savemenu")) {
@@ -30,10 +31,12 @@ public class CommandHandler implements CommandExecutor {
                             } else {
                                 player.sendMessage(main.prefix + ChatColor.RED + "Invalid permission");
                             }
+                            return true;
                         }
                     }
                 } else {
                     player.sendMessage(main.prefix + ChatColor.RED + "Invalid permission");
+                    return true;
                 }
             }
         }

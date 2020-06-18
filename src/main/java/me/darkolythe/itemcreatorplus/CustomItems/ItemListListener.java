@@ -43,18 +43,16 @@ public class ItemListListener implements Listener {
                             return;
                         }
                         int trueslot = ((page * 45) + event.getRawSlot());
-                        if (event.isLeftClick() && !event.isShiftClick() && player.hasPermission("itemcreatorplus.createcopy")) {
+                        if (event.isLeftClick() && !event.isShiftClick()) {
                             main.maintools.giveItem(player, main.itemlist.itemslist.get(trueslot));
                             event.setCancelled(true);
-                        } else if (event.isRightClick()) {
-                            if (event.isLeftClick() && !event.isShiftClick() && player.hasPermission("itemcreatorplus.deleteitem")) {
-                                main.itemlist.itemslist.remove(trueslot);
-                                event.setCancelled(true);
-                                main.itemlist.openItemList(player, (byte) 0);
-                            }
-                        } else if (event.isShiftClick()) {
-                            main.itemcreatorgui.getGUI(player, main.itemlist.itemslist.get(trueslot));
+                        } else if (event.isRightClick() && !event.isShiftClick()) {
+                            main.itemlist.itemslist.remove(trueslot);
                             event.setCancelled(true);
+                            main.itemlist.openItemList(player, (byte) 0);
+                        } else if (event.isShiftClick()) {
+                            event.setCancelled(true);
+                            main.itemcreatorgui.getGUI(player, main.itemlist.itemslist.get(trueslot));
                         }
                     }
                 }

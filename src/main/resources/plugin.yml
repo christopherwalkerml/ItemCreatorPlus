@@ -1,5 +1,5 @@
 name: ItemCreatorPlus
-version: 1.8.0
+version: 1.8.3
 author: Darkolythe
 main: me.darkolythe.itemcreatorplus.ItemCreatorPlus
 api-version: 1.13
@@ -23,9 +23,6 @@ permissions:
   itemcreatorplus.giveitem:
     description: gives the user the permission to give ICP items to certain players via the /icp give command (can be used in console)
     default: op
-  itemcreatorplus.createcopy:
-    description: allows the user to create copies of saved items via the ICP menu
-    default: op
   itemcreatorplus.enchant:
     description: allows the user to open and use the enchant section of ICP
     default: op
@@ -34,9 +31,6 @@ permissions:
     default: op
   itemcreatorplus.saveitem:
     description: allows the user to save custom items
-    default: op
-  itemcreatorplus.deleteitem:
-    description: allows the user to delete custom items
     default: op
   itemcreatorplus.lore:
     description: allows the user to open and use the custom lore section of ICP

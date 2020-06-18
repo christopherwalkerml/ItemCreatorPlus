@@ -30,7 +30,7 @@ public class ItemCreatorGUI {
         this.main = plugin; //set it equal to an instance of main
     }
 
-    public void getGUI(Player player, ItemStack pitem) {
+    public boolean getGUI(Player player, ItemStack pitem) {
         if (pitem.getType() != Material.AIR) {
             Inventory gui = Bukkit.getServer().createInventory(player, 27, ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Item Creator GUI");
             ItemStack item = new ItemStack(Material.GLASS_BOTTLE, 1);
@@ -80,9 +80,12 @@ public class ItemCreatorGUI {
             gui.setItem(22, pitem);
             
             player.openInventory(gui);
+
+            return true;
         } else {
             player.sendMessage(main.prefix + ChatColor.RED + "The item to customize must be in your main hand!");
         }
+        return false;
     }
 
     public void enchantGUI(Player player, ItemStack item) {
