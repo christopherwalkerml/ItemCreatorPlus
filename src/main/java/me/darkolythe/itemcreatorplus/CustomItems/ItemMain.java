@@ -51,6 +51,11 @@ public class ItemMain {
                         ItemStack item = catchChat.get(player).clone();
                         main.itemcreatorgui.getGUI(player, item);
                         catchChat.remove(player);
+                        if (toOpen.get(player).equals("lore")) {
+                            toOpen.put(player, null);
+                            main.itemcreatorgui.loreEditorGUI(player, item);
+                            return;
+                        }
                         toOpen.put(player, null);
                         main.itemcreatorgui.getGUI(player, item);
                     }

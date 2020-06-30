@@ -22,6 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 public class ItemCreatorGUI {
 
@@ -94,7 +95,7 @@ public class ItemCreatorGUI {
         gui.setItem((((Enchantment.values().length / 9) + 2) * 9) - 5, item);
         Enchantment[] enchants = Enchantment.values();
         Arrays.sort(enchants, Comparator.comparing(Enchantment::toString));
-        for (Enchantment enchant: enchants) {
+        for (Enchantment enchant : enchants) {
             ItemStack i = new ItemStack(Material.BOOK, 1);
             ItemMeta meta = i.getItemMeta();
             meta.setLore(Arrays.asList(ChatColor.GOLD + WordUtils.capitalize(enchant.toString().split(",")[0].replace("Enchantment[minecraft:", "").replace("_", " ")),
@@ -107,11 +108,7 @@ public class ItemCreatorGUI {
             gui.setItem(index, i);
             index += 1;
         }
-        ItemStack i = new ItemStack(Material.BARRIER, 1);
-        ItemMeta m = i.getItemMeta();
-        m.setDisplayName(ChatColor.RED + "Go back to main menu");
-        i.setItemMeta(m);
-        gui.setItem((((Enchantment.values().length / 9) + 2) * 9) - 1, i);
+        gui.setItem((((Enchantment.values().length / 9) + 2) * 9) - 1, createBackButton());
         player.openInventory(gui);
     }
 
@@ -211,11 +208,7 @@ public class ItemCreatorGUI {
 
         gui.setItem(22, item);
 
-        i = new ItemStack(Material.BARRIER, 1);
-        m = i.getItemMeta();
-        m.setDisplayName(ChatColor.RED + "Go back to main menu");
-        i.setItemMeta(m);
-        gui.setItem(26, i);
+        gui.setItem(26, createBackButton());
 
         player.openInventory(gui);
     }
@@ -278,11 +271,7 @@ public class ItemCreatorGUI {
 
         gui.setItem(40, item);
 
-        i = new ItemStack(Material.BARRIER, 1);
-        m = i.getItemMeta();
-        m.setDisplayName(ChatColor.RED + "Go back to main menu");
-        i.setItemMeta(m);
-        gui.setItem(44, i);
+        gui.setItem(44, createBackButton());
 
         player.openInventory(gui);
     }
@@ -330,13 +319,49 @@ public class ItemCreatorGUI {
 
         gui.setItem(22, item);
 
-        i = new ItemStack(Material.BARRIER, 1);
-        m = i.getItemMeta();
-        m.setDisplayName(ChatColor.RED + "Go back to special modifiers menu");
-        i.setItemMeta(m);
-        gui.setItem(26, i);
+        gui.setItem(26, createBackButton());
 
         player.openInventory(gui);
+    }
+
+    public void loreEditorGUI(Player player, ItemStack item) {
+        if (item.getItemMeta().hasLore() && item.getItemMeta().getLore().size() > 0) {
+            List<String> lore = item.getItemMeta().getLore();
+            Inventory gui = Bukkit.getServer().createInventory(player, ((lore.size() / 9) + 2) * 9, ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Lore Editor GUI");
+            int index = 0;
+            gui.setItem((((lore.size() / 9) + 2) * 9) - 5, item);
+
+            for (String l : lore) {
+                ItemStack i = new ItemStack(Material.PAPER);
+                ItemMeta m = i.getItemMeta();
+                m.setDisplayName(l);
+                m.setLore(Arrays.asList(
+                        ChatColor.GRAY + "Left Click to edit",
+                        ChatColor.GRAY + "Right Click to delete",
+                        "",
+                        ChatColor.RED + "Note: Editing 'Potion Effects' will remove their effects."));
+                i.setItemMeta(m);
+                gui.setItem(index, i);
+                index++;
+            }
+
+            ItemStack addLore = new ItemStack(Material.INK_SAC);
+            ItemMeta loreMeta = addLore.getItemMeta();
+            loreMeta.setDisplayName(ChatColor.GREEN.toString() + "Add a line of lore");
+            addLore.setItemMeta(loreMeta);
+            gui.setItem(index, addLore);
+
+            gui.setItem((((lore.size() / 9) + 2) * 9) - 1, createBackButton());
+            player.openInventory(gui);
+        }
+    }
+
+    public ItemStack createBackButton() {
+        ItemStack i = new ItemStack(Material.BARRIER, 1);
+        ItemMeta m = i.getItemMeta();
+        m.setDisplayName(ChatColor.RED + "Go back to main menu");
+        i.setItemMeta(m);
+        return i;
     }
 }
 

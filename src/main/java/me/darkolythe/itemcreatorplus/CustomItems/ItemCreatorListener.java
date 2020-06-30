@@ -32,318 +32,28 @@ public class ItemCreatorListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
         String title = player.getOpenInventory().getTitle();
-        ItemStack pitem;
         boolean isproperitem = true;
         if (item != null) {
             if (event.getInventory().getType() == InventoryType.CHEST) {
                 if (event.getClickedInventory() != player.getInventory()) {
                     if (title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Enchantment GUI")) {
                         event.setCancelled(true);
-                        pitem = event.getInventory().getItem((((Enchantment.values().length / 9) + 2) * 9) - 5);
-                        if (event.getRawSlot() < ((Enchantment.values().length / 9) + 1) * 9 && event.getRawSlot() >= 0 && pitem != null) {
-                            Enchantment[] enchants = Enchantment.values();
-                            Arrays.sort(enchants, Comparator.comparing(Enchantment::toString));
-                            Enchantment enchant = enchants[event.getRawSlot()];
-                            if (event.isLeftClick()) {
-                                if (pitem.containsEnchantment(enchant)) {
-                                    pitem.addUnsafeEnchantment(enchant, pitem.getEnchantmentLevel(enchant) + 1);
-                                } else {
-                                    pitem.addUnsafeEnchantment(enchant, 1);
-                                }
-                            } else if (event.isRightClick()) {
-                                if (pitem.getEnchantmentLevel(enchant) == 1) {
-                                    pitem.removeEnchantment(enchant);
-                                }
-                                if (pitem.containsEnchantment(enchant)) {
-                                    pitem.addUnsafeEnchantment(enchant, pitem.getEnchantmentLevel(enchant) - 1);
-                                }
-                            }
-                            main.itemcreatorgui.enchantGUI(player, pitem);
-                        }
-                        if (event.getSlot() == (((Enchantment.values().length / 9) + 2) * 9) - 1) {
-                            main.itemcreatorgui.getGUI(player, pitem);
-                        }
+                        clickEnchantmentGUI(event, player);
                     } else if (title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Special Modifiers GUI")) {
-                        pitem = event.getInventory().getItem(22);
                         event.setCancelled(true);
-                        if (event.getSlot() <= 33 && event.getSlot() >= 0 && pitem != null) {
-                            if (event.isLeftClick()) {
-                                if (event.getSlot() == 0) {
-                                    if (event.isShiftClick()) {
-                                        pitem.setDurability((short) (pitem.getDurability() + 10));
-                                    } else {
-                                        pitem.setDurability((short) (pitem.getDurability() + 1));
-                                    }
-                                } else if (event.getSlot() == 1) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    pmeta.setUnbreakable(true);
-                                    pitem.setItemMeta(pmeta);
-                                } else if (event.getSlot() == 2) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_ARMOR, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 3) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 4) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_ATTACK_DAMAGE, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 5) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_MAX_HEALTH, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 6) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 0.10, Attribute.GENERIC_MOVEMENT_SPEED, AttributeModifier.Operation.ADD_SCALAR);
-                                } else if (event.getSlot() == 7) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 0.10, Attribute.GENERIC_ATTACK_SPEED, AttributeModifier.Operation.ADD_SCALAR);
-                                } else if (event.getSlot() == 8) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 11) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    if (pmeta != null) {
-                                        pmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                                    }
-                                    pitem.setItemMeta(pmeta);
-                                } else if (event.getSlot() == 12) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    if (pmeta != null) {
-                                        pmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                                    }
-                                    pitem.setItemMeta(pmeta);
-                                } else if (event.getSlot() == 14) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    if (pmeta != null) {
-                                        pmeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-                                    }
-                                    pitem.setItemMeta(pmeta);
-                                } else if (event.getSlot() == 15) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    if (pmeta != null) {
-                                        pmeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-                                    }
-                                    pitem.setItemMeta(pmeta);
-                                }
-                            } else if (event.isRightClick()) {
-                                if (event.getSlot() == 0) {
-                                    if (event.isShiftClick()) {
-                                        pitem.setDurability((short) (pitem.getDurability() - 10));
-                                    } else {
-                                        pitem.setDurability((short) (pitem.getDurability() - 1));
-                                    }
-                                } else if (event.getSlot() == 1) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    pmeta.setUnbreakable(false);
-                                    pitem.setItemMeta(pmeta);
-                                } else if (event.getSlot() == 2) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_ARMOR, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 3) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 4) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_ATTACK_DAMAGE, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 5) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_MAX_HEALTH, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 6) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -0.10, Attribute.GENERIC_MOVEMENT_SPEED, AttributeModifier.Operation.ADD_SCALAR);
-                                } else if (event.getSlot() == 7) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -0.10, Attribute.GENERIC_ATTACK_SPEED, AttributeModifier.Operation.ADD_SCALAR);
-                                } else if (event.getSlot() == 8) {
-                                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_NUMBER);
-                                } else if (event.getSlot() == 11) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    if (pmeta != null) {
-                                        if (pmeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
-                                            pmeta.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                                            pitem.setItemMeta(pmeta);
-                                        }
-                                    }
-                                } else if (event.getSlot() == 12) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    if (pmeta != null) {
-                                        if (pmeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
-                                            pmeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-                                            pitem.setItemMeta(pmeta);
-                                        }
-                                    }
-                                } else if (event.getSlot() == 14) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    if (pmeta != null) {
-                                        if (pmeta.hasItemFlag(ItemFlag.HIDE_UNBREAKABLE)) {
-                                            pmeta.removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-                                            pitem.setItemMeta(pmeta);
-                                        }
-                                    }
-                                } else if (event.getSlot() == 15) {
-                                    ItemMeta pmeta = pitem.getItemMeta();
-                                    if (pmeta != null) {
-                                        if (pmeta.hasItemFlag(ItemFlag.HIDE_POTION_EFFECTS)) {
-                                            pmeta.removeItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-                                            pitem.setItemMeta(pmeta);
-                                        }
-                                    }
-                                }
-                            }
-                            if (event.getSlot() == 26) {
-                                main.itemcreatorgui.getGUI(player, pitem);
-                            }
-                        }
-                    } else if (title.equals(ChatColor.AQUA.toString() + ChatColor.BOLD.toString() + "Choose equipment slot")) {
+                        clickSpecialModifiersGUI(event, player);
+                    } else if (title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Choose equipment slot")) {
                         event.setCancelled(true);
-                        pitem = event.getInventory().getItem(22);
-                        String slot = "";
-                        if (event.getRawSlot() >= 1 && event.getRawSlot() <= 8) {
-                            slot = event.getCurrentItem().getItemMeta().getDisplayName().replace(" Slot", "").replace(ChatColor.AQUA.toString(), "").toUpperCase();
-                            if (slot.equals("ALL")) {
-                                slot = null;
-                            }
-                        }
-                        if (event.getRawSlot() >= 1 && event.getRawSlot() <= 7) {
-                            setAttribute(Attribute.valueOf(event.getCurrentItem().getItemMeta().getLore().get(1).replace(ChatColor.GRAY.toString(), "")),
-                                    pitem, Double.parseDouble(event.getCurrentItem().getItemMeta().getLore().get(0).replace(ChatColor.GRAY + "Add ", "").replace(" to this slot", "")),
-                                    AttributeModifier.Operation.valueOf(event.getCurrentItem().getItemMeta().getLore().get(2).replace(ChatColor.GRAY.toString(), "")),
-                                    slot);
-                        } else if (event.getRawSlot() == 8) {
-                            setAttribute(Attribute.valueOf(event.getCurrentItem().getItemMeta().getLore().get(1).replace(ChatColor.GRAY.toString(), "")),
-                                    pitem, Double.parseDouble(event.getCurrentItem().getItemMeta().getLore().get(0).replace(ChatColor.GRAY + "Add ", "").replace(" to this slot", "")),
-                                    AttributeModifier.Operation.valueOf(event.getCurrentItem().getItemMeta().getLore().get(2).replace(ChatColor.GRAY.toString(), "")),
-                                    slot);
-                        } else if (event.getSlot() == 26) {
-                            main.itemcreatorgui.modifiersGUI(player, pitem);
-                        }
+                        clickAttributesGUI(event, player);
                     } else if (title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Potion Effects GUI")) {
                         event.setCancelled(true);
-                        pitem = event.getInventory().getItem(40);
-                        if (event.getSlot() >= 0 && event.getSlot() <= event.getInventory().getContents().length - 2) {
-                            boolean contains = false;
-                            if (item.hasItemMeta()) {
-                                ItemMeta itemmeta = item.getItemMeta();
-                                String enchant = itemmeta.getLore().get(0).replace(ChatColor.GOLD.toString(), ChatColor.GRAY.toString());
-                                List<String> lore = new ArrayList<>();
-                                ItemMeta pmeta = pitem.getItemMeta();
-                                if (pmeta != null) {
-                                    if (pmeta.hasLore()) {
-                                        for (String l : pmeta.getLore()) {
-                                            String enchantClear = enchant.replace(ChatColor.GRAY.toString(), "").trim();
-                                            String loreClear = l.replace(ChatColor.RED.toString(), "").replaceAll("([^A-z ])", "").trim();
-                                            if (enchantClear.equals(loreClear) && ((event.isShiftClick() && l.contains("-")) || (!event.isShiftClick() && !l.contains("-")))) {
-                                                int level = Integer.parseInt(l.replace(ChatColor.RED.toString(), "").replace(ChatColor.GRAY.toString(), "").replaceAll("([^0-9 ])", "").trim());
-                                                if (event.isLeftClick()) {
-                                                    if (event.isShiftClick()) {
-                                                        lore.add(ChatColor.RED + "- " + enchant + " " + (level + 1));
-                                                    } else {
-                                                        lore.add(enchant + " " + (level + 1));
-                                                    }
-                                                } else if (event.isRightClick()) {
-                                                    if (level - 1 > 0) {
-                                                        if (event.isShiftClick()) {
-                                                            lore.add(ChatColor.RED + "- " + enchant + " " + (level - 1));
-                                                        } else {
-                                                            lore.add(enchant + " " + (level - 1));
-                                                        }
-                                                    }
-                                                }
-                                                contains = true;
-                                            } else {
-                                                lore.add(l);
-                                            }
-                                        }
-                                    }
-                                }
-                                if (!contains) {
-                                    List<String> newlore = new ArrayList<>();
-                                    if (event.isLeftClick()) {
-                                        if (event.isShiftClick()) {
-                                            lore.add(ChatColor.RED + "- " + enchant + " " + 1);
-                                        } else {
-                                            lore.add(enchant + " " + 1);
-                                        }
-                                    }
-                                    for (String l : lore) {
-                                        newlore.add(l);
-                                    }
-                                    pmeta.setLore(newlore);
-                                } else {
-                                    pmeta.setLore(lore);
-                                }
-                                pitem.setItemMeta(pmeta);
-                            }
-                            main.itemcreatorgui.potionEffectsGUI(player, pitem);
-                        }
-                        if (event.getSlot() == 44) {
-                            main.itemcreatorgui.getGUI(player, pitem);
-                        }
+                        clickPotionEffectsGUI(event, player);
                     } else if (title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Item Creator GUI")) {
                         event.setCancelled(true);
-                        if (item.hasItemMeta()) {
-                            ItemMeta itemmeta = item.getItemMeta();
-                            if (itemmeta.getDisplayName().equals(ChatColor.DARK_PURPLE + "Status Effects")) {
-                                if (player.hasPermission("itemcreatorplus.status")) {
-                                    main.itemcreatorgui.potionEffectsGUI(player, event.getInventory().getItem(22));
-                                } else {
-                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
-                                }
-                            } else if (itemmeta.getDisplayName().equals(ChatColor.BLUE + "Special Modifiers")) {
-                                if (player.hasPermission("itemcreatorplus.specmod")) {
-                                    main.itemcreatorgui.modifiersGUI(player, event.getInventory().getItem(22));
-                                } else {
-                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
-                                }
-                            } else if (itemmeta.getDisplayName().equals(ChatColor.BLUE + "Item Lore")) {
-                                if (player.hasPermission("itemcreatorplus.lore")) {
-                                    if (event.isLeftClick()) {
-                                        main.itemmain.catchChat.put(player, event.getInventory().getItem(22));
-                                        main.itemmain.catchType.put(player, "lore");
-                                        player.closeInventory();
-                                        player.sendMessage(main.prefix + ChatColor.GRAY + "Enter a single line of lore in chat. Type 'cancel' to cancel.");
-                                    } else if (event.isRightClick()) {
-                                        ItemStack i = event.getInventory().getItem(22);
-                                        ItemMeta m = i.getItemMeta();
-                                        m.setLore(null);
-                                        i.setItemMeta(m);
-                                    }
-                                } else {
-                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
-                                }
-                            } else if (itemmeta.getDisplayName().equals(ChatColor.GOLD + "Item Name")) {
-                                if (player.hasPermission("itemcreatorplus.name")) {
-                                    if (event.isLeftClick()) {
-                                        main.itemmain.catchChat.put(player, event.getInventory().getItem(22));
-                                        main.itemmain.catchType.put(player, "name");
-                                        player.closeInventory();
-                                        player.sendMessage(main.prefix + ChatColor.GRAY + "Enter item name in chat. Type 'cancel' to cancel.");
-                                    } else if (event.isRightClick()) {
-                                        ItemStack i = event.getInventory().getItem(22);
-                                        ItemMeta m = i.getItemMeta();
-                                        m.setDisplayName(null);
-                                        i.setItemMeta(m);
-                                    }
-                                } else {
-                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
-                                }
-                            } else if (itemmeta.getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Item Enchantments")) {
-                                if (player.hasPermission("itemcreatorplus.enchant")) {
-                                    if (event.isLeftClick()) {
-                                        main.itemcreatorgui.enchantGUI(player, event.getInventory().getItem(22));
-                                    } else if (event.isRightClick()) {
-                                        ItemStack i = event.getInventory().getItem(22);
-                                        for (Enchantment enchant : i.getEnchantments().keySet()) {
-                                            i.removeEnchantment(enchant);
-                                        }
-                                    }
-                                } else {
-                                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
-                                }
-                            } else if (event.getSlot() == 22) {
-                                player.getInventory().setItemInMainHand(item);
-                                player.closeInventory();
-                            }
-                        }
-                        if (event.getSlot() == 26) {
-                            if (player.hasPermission("itemcreatorplus.saveitem")) {
-                                main.itemlist.itemslist.add(player.getOpenInventory().getTopInventory().getItem(22));
-                                player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
-                                event.setCancelled(true);
-                            } else {
-                                player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
-                            }
-                        }
-                        if (event.getSlot() == 22) {
-                            player.getInventory().setItemInMainHand(item);
-                            player.closeInventory();
-                        }
+                        clickGeneralGUI(event, player);
+                    } else if (title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Lore Editor GUI")) {
+                        event.setCancelled(true);
+                        clickLoreGUI(event, player);
                     }
                 } else {
                     isproperitem = false;
@@ -354,9 +64,10 @@ public class ItemCreatorListener implements Listener {
             if (!isproperitem) {
                 if (title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Enchantment GUI") ||
                         title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Special Modifiers GUI") ||
-                        title.equals(ChatColor.AQUA.toString() + ChatColor.BOLD.toString() + "Choose equipment slot") ||
+                        title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Choose equipment slot") ||
                         title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Potion Effects GUI") ||
-                        title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Item Creator GUI")) {
+                        title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Item Creator GUI") ||
+                        title.equals(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Lore Editor GUI")) {
                     event.setCancelled(true);
                 }
             }
@@ -367,23 +78,365 @@ public class ItemCreatorListener implements Listener {
     public void onAsyncChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         if (main.itemmain.catchChat.containsKey(player)) {
-            if (!main.itemmain.catchType.get(player).equals("search")) {
-                event.setCancelled(true);
-                ItemStack item = main.itemmain.catchChat.get(player).clone();
-                if (!event.getMessage().equals("cancel")) {
-                    ItemMeta meta = item.getItemMeta();
-                    if (main.itemmain.catchType.get(player).equals("name")) {
-                        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
-                    } else if (main.itemmain.catchType.get(player).equals("lore")) {
+            event.setCancelled(true);
+            ItemStack item = main.itemmain.catchChat.get(player).clone();
+            if (!event.getMessage().equals("cancel")) {
+                ItemMeta meta = item.getItemMeta();
+                if (main.itemmain.catchType.get(player).equals("name")) {
+                    meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
+                } else if (main.itemmain.catchType.get(player).contains("lore")) {
+                    String data = main.itemmain.catchType.get(player);
+                    if (data.equals("lore")) {
                         meta.setLore(addLore(meta, ChatColor.translateAlternateColorCodes('&', event.getMessage()), -1));
+
+                        item.setItemMeta(meta);
+                        main.itemmain.toOpen.put(player, "lore");
+                        main.itemmain.catchChat.put(player, item);
+                        return;
+                    } else {
+                        int index = Integer.parseInt(data.replace("lore ", ""));
+                        List<String> lore = meta.getLore();
+                        lore.set(index, ChatColor.translateAlternateColorCodes('&', event.getMessage()));
+                        meta.setLore(lore);
+
+                        item.setItemMeta(meta);
+                        main.itemmain.toOpen.put(player, "lore");
+                        main.itemmain.catchChat.put(player, item);
+                        return;
                     }
-                    item.setItemMeta(meta);
                 }
-                main.itemmain.toOpen.put(player, ChatColor.translateAlternateColorCodes('&', event.getMessage()));
-                main.itemmain.catchChat.put(player, item);
-            } else {
-                return;
+                item.setItemMeta(meta);
             }
+            main.itemmain.toOpen.put(player, ChatColor.translateAlternateColorCodes('&', event.getMessage()));
+            main.itemmain.catchChat.put(player, item);
+        }
+    }
+
+    private void clickEnchantmentGUI(InventoryClickEvent event, Player player) {
+        ItemStack pitem = event.getInventory().getItem((((Enchantment.values().length / 9) + 2) * 9) - 5);
+        if (event.getRawSlot() < ((Enchantment.values().length / 9) + 1) * 9 && event.getRawSlot() >= 0 && pitem != null) {
+            Enchantment[] enchants = Enchantment.values();
+            Arrays.sort(enchants, Comparator.comparing(Enchantment::toString));
+            Enchantment enchant = enchants[event.getRawSlot()];
+            if (event.isLeftClick()) {
+                if (pitem.containsEnchantment(enchant)) {
+                    pitem.addUnsafeEnchantment(enchant, pitem.getEnchantmentLevel(enchant) + 1);
+                } else {
+                    pitem.addUnsafeEnchantment(enchant, 1);
+                }
+            } else if (event.isRightClick()) {
+                if (pitem.getEnchantmentLevel(enchant) == 1) {
+                    pitem.removeEnchantment(enchant);
+                }
+                if (pitem.containsEnchantment(enchant)) {
+                    pitem.addUnsafeEnchantment(enchant, pitem.getEnchantmentLevel(enchant) - 1);
+                }
+            }
+            main.itemcreatorgui.enchantGUI(player, pitem);
+        }
+        if (event.getCurrentItem().equals(main.itemcreatorgui.createBackButton())) {
+            main.itemcreatorgui.getGUI(player, pitem);
+        }
+    }
+
+    private void clickSpecialModifiersGUI(InventoryClickEvent event, Player player) {
+        ItemStack pitem = event.getInventory().getItem(22);
+        if (event.getSlot() <= 33 && event.getSlot() >= 0 && pitem != null) {
+            if (event.isLeftClick()) {
+                if (event.getSlot() == 0) {
+                    if (event.isShiftClick()) {
+                        pitem.setDurability((short) (pitem.getDurability() + 10));
+                    } else {
+                        pitem.setDurability((short) (pitem.getDurability() + 1));
+                    }
+                } else if (event.getSlot() == 1) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    pmeta.setUnbreakable(true);
+                    pitem.setItemMeta(pmeta);
+                } else if (event.getSlot() == 2) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_ARMOR, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 3) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 4) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_ATTACK_DAMAGE, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 5) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_MAX_HEALTH, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 6) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 0.10, Attribute.GENERIC_MOVEMENT_SPEED, AttributeModifier.Operation.ADD_SCALAR);
+                } else if (event.getSlot() == 7) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 0.10, Attribute.GENERIC_ATTACK_SPEED, AttributeModifier.Operation.ADD_SCALAR);
+                } else if (event.getSlot() == 8) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, 1, Attribute.GENERIC_KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 11) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    if (pmeta != null) {
+                        pmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                    }
+                    pitem.setItemMeta(pmeta);
+                } else if (event.getSlot() == 12) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    if (pmeta != null) {
+                        pmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    }
+                    pitem.setItemMeta(pmeta);
+                } else if (event.getSlot() == 14) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    if (pmeta != null) {
+                        pmeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+                    }
+                    pitem.setItemMeta(pmeta);
+                } else if (event.getSlot() == 15) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    if (pmeta != null) {
+                        pmeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                    }
+                    pitem.setItemMeta(pmeta);
+                }
+            } else if (event.isRightClick()) {
+                if (event.getSlot() == 0) {
+                    if (event.isShiftClick()) {
+                        pitem.setDurability((short) (pitem.getDurability() - 10));
+                    } else {
+                        pitem.setDurability((short) (pitem.getDurability() - 1));
+                    }
+                } else if (event.getSlot() == 1) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    pmeta.setUnbreakable(false);
+                    pitem.setItemMeta(pmeta);
+                } else if (event.getSlot() == 2) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_ARMOR, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 3) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 4) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_ATTACK_DAMAGE, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 5) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_MAX_HEALTH, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 6) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -0.10, Attribute.GENERIC_MOVEMENT_SPEED, AttributeModifier.Operation.ADD_SCALAR);
+                } else if (event.getSlot() == 7) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -0.10, Attribute.GENERIC_ATTACK_SPEED, AttributeModifier.Operation.ADD_SCALAR);
+                } else if (event.getSlot() == 8) {
+                    main.itemcreatorgui.equipmentSlotGUI(player, pitem, -1, Attribute.GENERIC_KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_NUMBER);
+                } else if (event.getSlot() == 11) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    if (pmeta != null) {
+                        if (pmeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
+                            pmeta.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                            pitem.setItemMeta(pmeta);
+                        }
+                    }
+                } else if (event.getSlot() == 12) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    if (pmeta != null) {
+                        if (pmeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+                            pmeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+                            pitem.setItemMeta(pmeta);
+                        }
+                    }
+                } else if (event.getSlot() == 14) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    if (pmeta != null) {
+                        if (pmeta.hasItemFlag(ItemFlag.HIDE_UNBREAKABLE)) {
+                            pmeta.removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+                            pitem.setItemMeta(pmeta);
+                        }
+                    }
+                } else if (event.getSlot() == 15) {
+                    ItemMeta pmeta = pitem.getItemMeta();
+                    if (pmeta != null) {
+                        if (pmeta.hasItemFlag(ItemFlag.HIDE_POTION_EFFECTS)) {
+                            pmeta.removeItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                            pitem.setItemMeta(pmeta);
+                        }
+                    }
+                }
+            }
+            if (event.getCurrentItem().equals(main.itemcreatorgui.createBackButton())) {
+                main.itemcreatorgui.getGUI(player, pitem);
+            }
+        }
+    }
+
+    private void clickPotionEffectsGUI(InventoryClickEvent event, Player player) {
+        ItemStack item = event.getCurrentItem();
+        ItemStack pitem = event.getInventory().getItem(40);
+        if (event.getSlot() >= 0 && event.getSlot() <= event.getInventory().getContents().length - 2) {
+            boolean contains = false;
+            if (item.hasItemMeta()) {
+                ItemMeta itemmeta = item.getItemMeta();
+                String enchant = itemmeta.getLore().get(0).replace(ChatColor.GOLD.toString(), ChatColor.GRAY.toString());
+                List<String> lore = new ArrayList<>();
+                ItemMeta pmeta = pitem.getItemMeta();
+                if (pmeta != null) {
+                    if (pmeta.hasLore()) {
+                        for (String l : pmeta.getLore()) {
+                            String enchantClear = enchant.replace(ChatColor.GRAY.toString(), "").trim();
+                            String loreClear = l.replace(ChatColor.RED.toString(), "").replaceAll("([^A-z ])", "").trim();
+                            if (enchantClear.equals(loreClear) && ((event.isShiftClick() && l.contains("-")) || (!event.isShiftClick() && !l.contains("-")))) {
+                                int level = Integer.parseInt(l.replace(ChatColor.RED.toString(), "").replace(ChatColor.GRAY.toString(), "").replaceAll("([^0-9 ])", "").trim());
+                                if (event.isLeftClick()) {
+                                    if (event.isShiftClick()) {
+                                        lore.add(ChatColor.RED + "- " + enchant + " " + (level + 1));
+                                    } else {
+                                        lore.add(enchant + " " + (level + 1));
+                                    }
+                                } else if (event.isRightClick()) {
+                                    if (level - 1 > 0) {
+                                        if (event.isShiftClick()) {
+                                            lore.add(ChatColor.RED + "- " + enchant + " " + (level - 1));
+                                        } else {
+                                            lore.add(enchant + " " + (level - 1));
+                                        }
+                                    }
+                                }
+                                contains = true;
+                            } else {
+                                lore.add(l);
+                            }
+                        }
+                    }
+                }
+                if (!contains) {
+                    List<String> newlore = new ArrayList<>();
+                    if (event.isLeftClick()) {
+                        if (event.isShiftClick()) {
+                            lore.add(ChatColor.RED + "- " + enchant + " " + 1);
+                        } else {
+                            lore.add(enchant + " " + 1);
+                        }
+                    }
+                    for (String l : lore) {
+                        newlore.add(l);
+                    }
+                    pmeta.setLore(newlore);
+                } else {
+                    pmeta.setLore(lore);
+                }
+                pitem.setItemMeta(pmeta);
+            }
+            main.itemcreatorgui.potionEffectsGUI(player, pitem);
+        }
+        if (event.getCurrentItem().equals(main.itemcreatorgui.createBackButton())) {
+            main.itemcreatorgui.getGUI(player, pitem);
+        }
+    }
+
+    private void clickGeneralGUI(InventoryClickEvent event, Player player) {
+        ItemStack item = event.getCurrentItem();
+        ItemStack pitem = event.getInventory().getItem(22);
+        if (item.hasItemMeta()) {
+            ItemMeta itemmeta = item.getItemMeta();
+            if (itemmeta.getDisplayName().equals(ChatColor.DARK_PURPLE + "Status Effects")) {
+                if (player.hasPermission("itemcreatorplus.status")) {
+                    main.itemcreatorgui.potionEffectsGUI(player, pitem);
+                } else {
+                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
+                }
+            } else if (itemmeta.getDisplayName().equals(ChatColor.BLUE + "Special Modifiers")) {
+                if (player.hasPermission("itemcreatorplus.specmod")) {
+                    main.itemcreatorgui.modifiersGUI(player, pitem);
+                } else {
+                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
+                }
+            } else if (itemmeta.getDisplayName().equals(ChatColor.BLUE + "Item Lore")) {
+                if (player.hasPermission("itemcreatorplus.lore")) {
+                    main.itemcreatorgui.loreEditorGUI(player, pitem);
+                } else {
+                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
+                }
+            } else if (itemmeta.getDisplayName().equals(ChatColor.GOLD + "Item Name")) {
+                if (player.hasPermission("itemcreatorplus.name")) {
+                    if (event.isLeftClick()) {
+                        main.itemmain.catchChat.put(player, pitem);
+                        main.itemmain.catchType.put(player, "name");
+                        player.closeInventory();
+                        player.sendMessage(main.prefix + ChatColor.GRAY + "Enter item name in chat. Type 'cancel' to cancel.");
+                    } else if (event.isRightClick()) {
+                        ItemMeta m = pitem.getItemMeta();
+                        m.setDisplayName(null);
+                        pitem.setItemMeta(m);
+                    }
+                } else {
+                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
+                }
+            } else if (itemmeta.getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Item Enchantments")) {
+                if (player.hasPermission("itemcreatorplus.enchant")) {
+                    if (event.isLeftClick()) {
+                        main.itemcreatorgui.enchantGUI(player, pitem);
+                    } else if (event.isRightClick()) {
+                        for (Enchantment enchant : pitem.getEnchantments().keySet()) {
+                            pitem.removeEnchantment(enchant);
+                        }
+                    }
+                } else {
+                    player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
+                }
+            } else if (event.getSlot() == 22) {
+                player.getInventory().setItemInMainHand(item);
+                player.closeInventory();
+            }
+        }
+        if (event.getSlot() == 26) {
+            if (player.hasPermission("itemcreatorplus.saveitem")) {
+                main.itemlist.itemslist.add(player.getOpenInventory().getTopInventory().getItem(22));
+                player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
+                event.setCancelled(true);
+            } else {
+                player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
+            }
+        }
+        if (event.getCurrentItem().equals(main.itemcreatorgui.createBackButton())) {
+            player.getInventory().setItemInMainHand(item);
+            player.closeInventory();
+        }
+    }
+
+    private void clickAttributesGUI(InventoryClickEvent event, Player player) {
+        ItemStack pitem = event.getInventory().getItem(22);
+        String slot = "";
+        if (event.getRawSlot() >= 1 && event.getRawSlot() <= 8) {
+            slot = event.getCurrentItem().getItemMeta().getDisplayName().replace(" Slot", "").replace(ChatColor.AQUA.toString(), "").toUpperCase();
+            if (slot.equals("ALL")) {
+                slot = null;
+            }
+        }
+        if (event.getRawSlot() >= 1 && event.getRawSlot() <= 7) {
+            setAttribute(Attribute.valueOf(event.getCurrentItem().getItemMeta().getLore().get(1).replace(ChatColor.GRAY.toString(), "")),
+                    pitem, Double.parseDouble(event.getCurrentItem().getItemMeta().getLore().get(0).replace(ChatColor.GRAY + "Add ", "").replace(" to this slot", "")),
+                    AttributeModifier.Operation.valueOf(event.getCurrentItem().getItemMeta().getLore().get(2).replace(ChatColor.GRAY.toString(), "")),
+                    slot);
+        } else if (event.getRawSlot() == 8) {
+            setAttribute(Attribute.valueOf(event.getCurrentItem().getItemMeta().getLore().get(1).replace(ChatColor.GRAY.toString(), "")),
+                    pitem, Double.parseDouble(event.getCurrentItem().getItemMeta().getLore().get(0).replace(ChatColor.GRAY + "Add ", "").replace(" to this slot", "")),
+                    AttributeModifier.Operation.valueOf(event.getCurrentItem().getItemMeta().getLore().get(2).replace(ChatColor.GRAY.toString(), "")),
+                    slot);
+        } else if (event.getCurrentItem().equals(main.itemcreatorgui.createBackButton())) {
+            main.itemcreatorgui.modifiersGUI(player, pitem);
+        }
+    }
+
+    private void clickLoreGUI(InventoryClickEvent event, Player player) {
+        ItemStack pitem = event.getInventory().getItem(event.getInventory().getSize() - 5);
+        List<String> lore = pitem.getItemMeta().getLore();
+        if (event.getCurrentItem() != null && event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GREEN.toString() + "Add a line of lore")) {
+            main.itemmain.catchChat.put(player, pitem);
+            main.itemmain.catchType.put(player, "lore");
+            player.closeInventory();
+            player.sendMessage(main.prefix + ChatColor.GRAY + "Enter a single line of lore in chat. Type 'cancel' to cancel.");
+        } else if (event.isLeftClick() && !event.getCurrentItem().equals(main.itemcreatorgui.createBackButton())) {
+            main.itemmain.catchChat.put(player, pitem);
+            main.itemmain.catchType.put(player, "lore " + event.getSlot());
+            player.closeInventory();
+            player.sendMessage(main.prefix + ChatColor.GRAY + "Enter a single line of lore in chat. Type 'cancel' to cancel.");
+        } else if (event.isRightClick()) {
+            ItemMeta m = pitem.getItemMeta();
+            lore.remove(event.getSlot());
+            m.setLore(lore);
+            pitem.setItemMeta(m);
+            event.getInventory().setItem(event.getInventory().getSize() - 5, pitem);
+            main.itemcreatorgui.loreEditorGUI(player, event.getInventory().getItem(event.getInventory().getSize() - 5));
+        } else if (event.getCurrentItem().equals(main.itemcreatorgui.createBackButton())) {
+            main.itemcreatorgui.getGUI(player, pitem);
         }
     }
 
