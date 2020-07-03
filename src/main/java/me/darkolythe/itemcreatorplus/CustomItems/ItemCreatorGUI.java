@@ -325,10 +325,12 @@ public class ItemCreatorGUI {
     }
 
     public void loreEditorGUI(Player player, ItemStack item) {
+        List<String> lore = item.getItemMeta().getLore();
+        Inventory gui;
+        int index = 0;
+
         if (item.getItemMeta().hasLore() && item.getItemMeta().getLore().size() > 0) {
-            List<String> lore = item.getItemMeta().getLore();
-            Inventory gui = Bukkit.getServer().createInventory(player, ((lore.size() / 9) + 2) * 9, ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Lore Editor GUI");
-            int index = 0;
+            gui = Bukkit.getServer().createInventory(player, ((lore.size() / 9) + 2) * 9, ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Lore Editor GUI");
             gui.setItem((((lore.size() / 9) + 2) * 9) - 5, item);
 
             for (String l : lore) {
@@ -345,15 +347,21 @@ public class ItemCreatorGUI {
                 index++;
             }
 
-            ItemStack addLore = new ItemStack(Material.INK_SAC);
-            ItemMeta loreMeta = addLore.getItemMeta();
-            loreMeta.setDisplayName(ChatColor.GREEN.toString() + "Add a line of lore");
-            addLore.setItemMeta(loreMeta);
-            gui.setItem(index, addLore);
-
             gui.setItem((((lore.size() / 9) + 2) * 9) - 1, createBackButton());
-            player.openInventory(gui);
+        } else {
+            gui = Bukkit.getServer().createInventory(player, 18, ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Lore Editor GUI");
+            gui.setItem(13, item);
+
+            gui.setItem(17, createBackButton());
         }
+
+        ItemStack addLore = new ItemStack(Material.INK_SAC);
+        ItemMeta loreMeta = addLore.getItemMeta();
+        loreMeta.setDisplayName(ChatColor.GREEN.toString() + "Add a line of lore");
+        addLore.setItemMeta(loreMeta);
+        gui.setItem(index, addLore);
+
+        player.openInventory(gui);
     }
 
     public ItemStack createBackButton() {
