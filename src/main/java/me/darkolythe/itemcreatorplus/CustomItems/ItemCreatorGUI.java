@@ -277,7 +277,7 @@ public class ItemCreatorGUI {
     }
 
     public void equipmentSlotGUI(Player player, ItemStack item, double amount, Attribute at, AttributeModifier.Operation op) {
-        Inventory gui = Bukkit.getServer().createInventory(player, 27, ChatColor.AQUA.toString() + ChatColor.BOLD.toString() + "Choose equipment slot");
+        Inventory gui = Bukkit.getServer().createInventory(player, 27, ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD.toString() + "Choose equipment slot");
 
         ItemStack i = new ItemStack(Material.DIAMOND_HELMET);
         ItemMeta m = i.getItemMeta();
