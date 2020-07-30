@@ -1,3 +1,7 @@
 #this option allows items in ANY inventory slot to affect the player, instead of only armour and hands.
 #NOTE: This may cause/increase lag on your server.
 fullchecking: false
+
+#users without the permission "itemcreatorplus.nosavelimit" will have a max amount of items that can be created
+#set this to -1 to have no saved item cap
+saveitemlimit: 5

@@ -372,15 +372,23 @@ public class ItemCreatorListener implements Listener {
                     player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
                 }
             } else if (event.getSlot() == 22) {
-                player.getInventory().setItemInMainHand(item);
-                player.closeInventory();
+                if (player.hasPermission("itemcreatorplus.takeitem")) {
+                    player.getInventory().setItemInMainHand(item);
+                    player.closeInventory();
+                }
             }
         }
         if (event.getSlot() == 26) {
             if (player.hasPermission("itemcreatorplus.saveitem")) {
-                main.itemlist.itemslist.add(player.getOpenInventory().getTopInventory().getItem(22));
-                player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
-                event.setCancelled(true);
+                if (main.itemlist.playerItemCount(player) < main.itemlist.maxItems || player.hasPermission("itemcreatorplus.nosavelimit") || main.itemlist.maxItems == -1) {
+                    ItemStack citem = player.getOpenInventory().getTopInventory().getItem(22);
+                    main.itemlist.itemslist.add(citem);
+                    main.itemlist.playerlist.put(citem, player);
+                    player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
+                    event.setCancelled(true);
+                } else {
+                    player.sendMessage(main.prefix + ChatColor.RED + "You cannot save any more items!");
+                }
             } else {
                 player.sendMessage(main.prefix + ChatColor.RED + "You don't have permission to use that part of Item Creator Plus.");
             }

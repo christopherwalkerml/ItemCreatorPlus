@@ -34,6 +34,7 @@ public class MainTools {
 
     public void getConfigData() {
         main.saveDefaultConfig();
+        main.itemlist.maxItems = main.getConfig().getInt("saveitemlimit");
         main.itemmain.combinelevel = main.getConfig().getInt("combinelevel");
         main.saveConfig();
     }

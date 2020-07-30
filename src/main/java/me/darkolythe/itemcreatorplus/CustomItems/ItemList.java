@@ -13,8 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Math.min;
 
@@ -25,13 +24,17 @@ public class ItemList {
         this.main = plugin; //set it equal to an instance of main
     }
 
+    public int maxItems = 0;
+
     public List<ItemStack> itemslist = new ArrayList<>();
+    public Map<ItemStack, Player> playerlist = new HashMap<>();
 
     public FileConfiguration itemscfg;
     public File items;
 
     public void openItemList(Player player, byte page) {
         Inventory gui = Bukkit.getServer().createInventory(player, 54, org.bukkit.ChatColor.LIGHT_PURPLE.toString() + org.bukkit.ChatColor.BOLD.toString() + "Saved Items List");
+
         int i;
         for (i = 0; i < min(45, itemslist.size() - (page * 45)); i++) {
             ItemStack item = itemslist.get(i + (page * 45)).clone();
@@ -40,11 +43,12 @@ public class ItemList {
             if (itemmeta.hasLore()) {
                 lore = itemmeta.getLore();
             }
-            lore.add(org.bukkit.ChatColor.GRAY + "---------------------");
-            lore.add(org.bukkit.ChatColor.GRAY + "Left click to duplicate");
-            lore.add(org.bukkit.ChatColor.GRAY + "Shift click to edit");
-            lore.add(org.bukkit.ChatColor.GRAY + "Right click to delete");
-            lore.add(org.bukkit.ChatColor.GRAY + "---------------------");
+            lore.add(ChatColor.GRAY + "---------------------");
+            lore.add(ChatColor.GRAY + "Left click to duplicate");
+            lore.add(ChatColor.GRAY + "Shift click to edit");
+            lore.add(ChatColor.GRAY + "Right click to delete");
+            lore.add(ChatColor.GRAY + "Created by: " + ChatColor.RED + (playerlist.get(item) != null ? playerlist.get(item).getName() : "Unknown"));
+            lore.add(ChatColor.GRAY + "---------------------");
             itemmeta.setLore(lore);
             item.setItemMeta(itemmeta);
 
@@ -72,7 +76,13 @@ public class ItemList {
     public void importItemList() {
         if (itemscfg.contains("items")) {
             for (String item : itemscfg.getConfigurationSection("items").getKeys(false)) {
-                itemslist.add(itemscfg.getItemStack("items." + item));
+                if (itemscfg.contains("items." + item + ".item")) {
+                    itemslist.add(itemscfg.getItemStack("items." + item + ".item"));
+                    playerlist.put(itemscfg.getItemStack("items." + item + ".item"), (Player) itemscfg.get("items." + item + ".player"));
+                } else {
+                    itemslist.add(itemscfg.getItemStack("items." + item));
+                    playerlist.put(itemscfg.getItemStack("items." + item), null);
+                }
             }
         }
     }
@@ -80,10 +90,11 @@ public class ItemList {
     public void saveItemList() {
         itemscfg.set("items", null);
 
-        char c = 'a';
+        int c = 0;
 
         for (int i = 0; i < itemslist.size(); i++) {
-            itemscfg.set("items." + c, itemslist.get(i));
+            itemscfg.set("items." + c + ".player", playerlist.get(itemslist.get(i)));
+            itemscfg.set("items." + c + ".item", itemslist.get(i));
             c++;
         }
 
@@ -106,5 +117,16 @@ public class ItemList {
             }
         }
         itemscfg = YamlConfiguration.loadConfiguration(items);
+    }
+
+    public int playerItemCount(Player player) {
+        int count = 0;
+        for (ItemStack i : playerlist.keySet()) {
+            Player p = playerlist.get(i);
+            if (p != null && p.getName().equals(player.getName())) {
+                count += Collections.frequency(itemslist, i);
+            }
+        }
+        return count;
     }
 }
