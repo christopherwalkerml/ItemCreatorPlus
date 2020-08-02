@@ -1,6 +1,5 @@
 package me.darkolythe.itemcreatorplus;
 
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -53,7 +52,8 @@ public class CommandHandler implements CommandExecutor {
                                         String metaName = meta.getDisplayName();
 
                                         if (metaName.equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', name))
-                                                || ChatColor.stripColor(metaName).equalsIgnoreCase(ChatColor.stripColor(name))) {
+                                                || ChatColor.stripColor(metaName).equalsIgnoreCase(ChatColor.stripColor(name))
+                                                || containsAll(ChatColor.stripColor(metaName), name)) {
                                             main.maintools.giveItem(players, item);
                                             players.sendMessage(main.prefix + ChatColor.GREEN + "You have been given " + meta.getDisplayName());
                                             return true;
@@ -77,6 +77,16 @@ public class CommandHandler implements CommandExecutor {
             sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player itemname");
         } else if (args.length == 1) {
             sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp [items, give]");
+        }
+        return true;
+    }
+
+    private boolean containsAll(String str1, String str2) {
+        String[] list = str2.split(" ");
+        for (String s : list) {
+            if (!str1.toLowerCase().contains(s.toLowerCase())) {
+                return false;
+            }
         }
         return true;
     }
