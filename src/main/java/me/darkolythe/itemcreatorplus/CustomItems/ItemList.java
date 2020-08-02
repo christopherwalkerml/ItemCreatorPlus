@@ -4,6 +4,7 @@ import me.darkolythe.itemcreatorplus.ItemCreatorPlus;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class ItemList {
     public int maxItems = 0;
 
     public List<ItemStack> itemslist = new ArrayList<>();
-    public Map<ItemStack, Player> playerlist = new HashMap<>();
+    public Map<ItemStack, OfflinePlayer> playerlist = new HashMap<>();
 
     public FileConfiguration itemscfg;
     public File items;
@@ -78,7 +79,7 @@ public class ItemList {
             for (String item : itemscfg.getConfigurationSection("items").getKeys(false)) {
                 if (itemscfg.contains("items." + item + ".item")) {
                     itemslist.add(itemscfg.getItemStack("items." + item + ".item"));
-                    playerlist.put(itemscfg.getItemStack("items." + item + ".item"), (Player) itemscfg.get("items." + item + ".player"));
+                    playerlist.put(itemscfg.getItemStack("items." + item + ".item"), (OfflinePlayer) itemscfg.get("items." + item + ".player"));
                 } else {
                     itemslist.add(itemscfg.getItemStack("items." + item));
                     playerlist.put(itemscfg.getItemStack("items." + item), null);
@@ -122,7 +123,7 @@ public class ItemList {
     public int playerItemCount(Player player) {
         int count = 0;
         for (ItemStack i : playerlist.keySet()) {
-            Player p = playerlist.get(i);
+            OfflinePlayer p = playerlist.get(i);
             if (p != null && p.getName().equals(player.getName())) {
                 count += Collections.frequency(itemslist, i);
             }

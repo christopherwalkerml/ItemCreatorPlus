@@ -45,24 +45,23 @@ public class CommandHandler implements CommandExecutor {
                 if (args[0].equals("give")) {
                     for (Player players : Bukkit.getServer().getOnlinePlayers()) {
                         if (args[1].equalsIgnoreCase(players.getName())) {
+                            String name = args[2].replace("_", " ");
                             for (ItemStack item : main.itemlist.itemslist) {
                                 if (item.hasItemMeta()) {
                                     ItemMeta meta = item.getItemMeta();
                                     if (meta.hasDisplayName()) {
-                                        if (meta.getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', args[2].replace("_", " ")))) {
+                                        String metaName = meta.getDisplayName();
+
+                                        if (metaName.equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', name))
+                                                || ChatColor.stripColor(metaName).equalsIgnoreCase(ChatColor.stripColor(name))) {
                                             main.maintools.giveItem(players, item);
                                             players.sendMessage(main.prefix + ChatColor.GREEN + "You have been given " + meta.getDisplayName());
                                             return true;
                                         }
                                     }
                                 }
-                                if (WordUtils.capitalize(item.getType().toString().toLowerCase()).equals(ChatColor.translateAlternateColorCodes('&', args[2].replace("_", " ")))) {
-                                    main.maintools.giveItem(players, item);
-                                    players.sendMessage(main.prefix + ChatColor.GREEN + "You have been given " + WordUtils.capitalize(item.getType().toString().toLowerCase()));
-                                    return true;
-                                }
                             }
-                            sender.sendMessage(main.prefix + ChatColor.RED + "Item " + args[2] + " not found.");
+                            sender.sendMessage(main.prefix + ChatColor.RED + "Item " + name + " not found.");
                             return true;
                         }
                     }

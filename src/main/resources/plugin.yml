@@ -1,5 +1,5 @@
 name: ItemCreatorPlus
-version: 1.10.0
+version: 1.10.1
 author: Darkolythe
 main: me.darkolythe.itemcreatorplus.ItemCreatorPlus
 api-version: 1.13
@@ -46,4 +46,7 @@ permissions:
     default: true
   itemcreatorplus.nosavelimit:
     description: allows the user to have no saved item limit
+    default: op
+  itemcreatorplus.editoverride:
+    description: allows the user to edit any items that weren't made by them (works for items made by "Unknown")
     default: op

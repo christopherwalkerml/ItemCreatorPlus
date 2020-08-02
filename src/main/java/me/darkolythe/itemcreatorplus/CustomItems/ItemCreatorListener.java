@@ -379,9 +379,22 @@ public class ItemCreatorListener implements Listener {
             }
         }
         if (event.getSlot() == 26) {
+            ItemStack citem = player.getOpenInventory().getTopInventory().getItem(22);
             if (player.hasPermission("itemcreatorplus.saveitem")) {
-                if (main.itemlist.playerItemCount(player) < main.itemlist.maxItems || player.hasPermission("itemcreatorplus.nosavelimit") || main.itemlist.maxItems == -1) {
-                    ItemStack citem = player.getOpenInventory().getTopInventory().getItem(22);
+                if (main.itemlistlistener.currentlyEditing.containsKey(player)) {
+                    event.setCancelled(true);
+
+                    ItemStack oldItem = main.itemlistlistener.currentlyEditing.get(player);
+
+                    main.itemlist.playerlist.remove(oldItem); //remove old item from player list
+                    main.itemlist.itemslist.set(main.itemlist.itemslist.indexOf(oldItem), citem); //replace old item with new item
+                    main.itemlistlistener.currentlyEditing.remove(player);
+
+                    main.itemlist.playerlist.put(citem, player); //save item to player list
+                    player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
+
+                    player.closeInventory();
+                } else if (main.itemlist.playerItemCount(player) < main.itemlist.maxItems || player.hasPermission("itemcreatorplus.nosavelimit") || main.itemlist.maxItems == -1) {
                     main.itemlist.itemslist.add(citem);
                     main.itemlist.playerlist.put(citem, player);
                     player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
