@@ -10,6 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -113,6 +114,11 @@ public class ItemCreatorListener implements Listener {
     }
 
     private void clickEnchantmentGUI(InventoryClickEvent event, Player player) {
+        if (event.getClick() == ClickType.DOUBLE_CLICK) {
+            event.setCancelled(true);
+            return;
+        }
+
         ItemStack pitem = event.getInventory().getItem((((Enchantment.values().length / 9) + 2) * 9) - 5);
         if (event.getRawSlot() < ((Enchantment.values().length / 9) + 1) * 9 && event.getRawSlot() >= 0 && pitem != null) {
             Enchantment[] enchants = Enchantment.values();
@@ -140,6 +146,11 @@ public class ItemCreatorListener implements Listener {
     }
 
     private void clickSpecialModifiersGUI(InventoryClickEvent event, Player player) {
+        if (event.getClick() == ClickType.DOUBLE_CLICK) {
+            event.setCancelled(true);
+            return;
+        }
+
         ItemStack pitem = event.getInventory().getItem(22);
         if (event.getSlot() <= 33 && event.getSlot() >= 0 && pitem != null) {
             if (event.isLeftClick()) {
@@ -413,6 +424,11 @@ public class ItemCreatorListener implements Listener {
     }
 
     private void clickAttributesGUI(InventoryClickEvent event, Player player) {
+        if (event.getClick() == ClickType.DOUBLE_CLICK) {
+            event.setCancelled(true);
+            return;
+        }
+
         ItemStack pitem = event.getInventory().getItem(22);
         String slot = "";
         if (event.getRawSlot() >= 1 && event.getRawSlot() <= 8) {

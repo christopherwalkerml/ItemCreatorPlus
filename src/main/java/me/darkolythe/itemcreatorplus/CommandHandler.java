@@ -68,13 +68,13 @@ public class CommandHandler implements CommandExecutor {
                     sender.sendMessage(main.prefix + ChatColor.RED + "Player " + args[1] + " not found.");
                     return true;
                 } else {
-                    sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player itemname");
+                    sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name");
                 }
             } else {
                 sender.sendMessage(main.prefix + ChatColor.RED + "Invalid permission");
             }
-        } else if ((args.length == 1 || args.length == 2) && args[0].equals("give")) {
-            sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player itemname");
+        } else if (args.length > 0 && args[0].equals("give")) {
+            sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name");
         } else if (args.length == 1) {
             sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp [items, give]");
         }
