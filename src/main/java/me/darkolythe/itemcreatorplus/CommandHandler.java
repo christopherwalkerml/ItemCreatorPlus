@@ -1,5 +1,6 @@
 package me.darkolythe.itemcreatorplus;
 
+import me.darkolythe.itemcreatorplus.CustomItems.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -45,16 +46,16 @@ public class CommandHandler implements CommandExecutor {
                     for (Player players : Bukkit.getServer().getOnlinePlayers()) {
                         if (args[1].equalsIgnoreCase(players.getName())) {
                             String name = args[2].replace("_", " ");
-                            for (ItemStack item : main.itemlist.itemslist) {
-                                if (item.hasItemMeta()) {
-                                    ItemMeta meta = item.getItemMeta();
+                            for (CustomItem item : main.itemlist.itemslist) {
+                                if (item.item.hasItemMeta()) {
+                                    ItemMeta meta = item.item.getItemMeta();
                                     if (meta.hasDisplayName()) {
                                         String metaName = meta.getDisplayName();
 
                                         if (metaName.equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', name))
                                                 || ChatColor.stripColor(metaName).equalsIgnoreCase(ChatColor.stripColor(name))
                                                 || containsAll(ChatColor.stripColor(metaName), name)) {
-                                            main.maintools.giveItem(players, item);
+                                            main.maintools.giveItem(players, item.item);
                                             players.sendMessage(main.prefix + ChatColor.GREEN + "You have been given " + meta.getDisplayName());
                                             return true;
                                         }

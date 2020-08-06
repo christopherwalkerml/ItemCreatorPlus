@@ -40,10 +40,9 @@ public class MainTools {
     }
 
     public boolean giveItem(Player player, ItemStack item) {
-        int firstempty = player.getInventory().firstEmpty();
-        if (firstempty != -1) {
-            player.getInventory().setItem(firstempty, item);
+        if (player.getInventory().addItem(item).keySet().size() != 0) {
+            return false;
         }
-        return false;
+        return true;
     }
 }

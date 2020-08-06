@@ -21,7 +21,7 @@ public class ItemListListener implements Listener {
         this.main = plugin; //set it equal to an instance of main
     }
 
-    public Map<Player, ItemStack> currentlyEditing = new HashMap<>();
+    public Map<Player, CustomItem> currentlyEditing = new HashMap<>();
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -49,18 +49,17 @@ public class ItemListListener implements Listener {
                             return;
                         }
                         int trueslot = ((page * 45) + event.getRawSlot());
-                        ItemStack item = main.itemlist.itemslist.get(trueslot);
+                        CustomItem item = main.itemlist.itemslist.get(trueslot);
                         ItemStack invItem = event.getCurrentItem();
                         if (event.isLeftClick() && !event.isShiftClick()) { //GIVE ITEM
                             if (player.hasPermission("itemcreatorplus.giveitem")) {
-                                main.maintools.giveItem(player, item);
+                                main.maintools.giveItem(player, item.item);
                                 event.setCancelled(true);
                             } else {
                                 player.sendMessage(main.prefix + ChatColor.RED + "You do not have permission to do that");
                             }
                         } else if (event.isRightClick() && !event.isShiftClick()) { //DELETE ITEM
                             if (isCreatedByUser(invItem, player)) {
-                                main.itemlist.playerlist.remove(item);
                                 main.itemlist.itemslist.remove(trueslot);
                                 event.setCancelled(true);
                                 main.itemlist.openItemList(player, (byte) 0);
@@ -71,7 +70,7 @@ public class ItemListListener implements Listener {
                             if (isCreatedByUser(invItem, player)) {
                                 currentlyEditing.put(player, item);
                                 event.setCancelled(true);
-                                main.itemcreatorgui.getGUI(player, item);
+                                main.itemcreatorgui.getGUI(player, item.item);
                             } else {
                                 player.sendMessage(main.prefix + ChatColor.RED + "You cannot edit an item you did not create");
                             }

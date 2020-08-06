@@ -27,8 +27,7 @@ public class ItemList {
 
     public int maxItems = 0;
 
-    public List<ItemStack> itemslist = new ArrayList<>();
-    public Map<ItemStack, OfflinePlayer> playerlist = new HashMap<>();
+    public List<CustomItem> itemslist = new ArrayList<>();
 
     public FileConfiguration itemscfg;
     public File items;
@@ -38,7 +37,7 @@ public class ItemList {
 
         int i;
         for (i = 0; i < min(45, itemslist.size() - (page * 45)); i++) {
-            ItemStack item = itemslist.get(i + (page * 45)).clone();
+            ItemStack item = itemslist.get(i + (page * 45)).item.clone();
             ItemMeta itemmeta = item.getItemMeta();
             List<String> lore = new ArrayList<>();
             if (itemmeta.hasLore()) {
@@ -48,7 +47,8 @@ public class ItemList {
             lore.add(ChatColor.GRAY + "Left click to duplicate");
             lore.add(ChatColor.GRAY + "Shift click to edit");
             lore.add(ChatColor.GRAY + "Right click to delete");
-            lore.add(ChatColor.GRAY + "Created by: " + ChatColor.RED + (playerlist.get(item) != null ? playerlist.get(item).getName() : "Unknown"));
+            lore.add(ChatColor.GRAY + "Created by: " + ChatColor.RED + ((itemslist.get(i).creator != null && itemslist.get(i).getCreatorName() != null)
+                                                                        ? itemslist.get(i).getCreatorName() : "Unknown"));
             lore.add(ChatColor.GRAY + "---------------------");
             itemmeta.setLore(lore);
             item.setItemMeta(itemmeta);
@@ -76,13 +76,29 @@ public class ItemList {
 
     public void importItemList() {
         if (itemscfg.contains("items")) {
-            for (String item : itemscfg.getConfigurationSection("items").getKeys(false)) {
-                if (itemscfg.contains("items." + item + ".item")) {
-                    itemslist.add(itemscfg.getItemStack("items." + item + ".item"));
-                    playerlist.put(itemscfg.getItemStack("items." + item + ".item"), (OfflinePlayer) itemscfg.get("items." + item + ".player"));
-                } else {
-                    itemslist.add(itemscfg.getItemStack("items." + item));
-                    playerlist.put(itemscfg.getItemStack("items." + item), null);
+            Object identifier = itemscfg.get("items");
+            if (identifier instanceof List) {
+                List<?> temp = itemscfg.getList("items");
+                for (Object o : temp) {
+                    itemslist.add((CustomItem) o);
+                }
+            } else {
+                for (String item : itemscfg.getConfigurationSection("items").getKeys(false)) {
+                    ItemStack i;
+                    OfflinePlayer p;
+                    CustomItem ci;
+                    if (itemscfg.contains("items." + item + ".item")) {
+                        i = itemscfg.getItemStack("items." + item + ".item");
+                        p = (OfflinePlayer) itemscfg.get("items." + item + ".player");
+                        List<String> plr = new ArrayList<>();
+                        plr.add(p.getName());
+                        plr.add(p.getUniqueId().toString());
+                        ci = new CustomItem(i, plr);
+                    } else {
+                        i = itemscfg.getItemStack("items." + item);
+                        ci = new CustomItem(i, new ArrayList<>());
+                    }
+                    itemslist.add(ci);
                 }
             }
         }
@@ -90,14 +106,7 @@ public class ItemList {
 
     public void saveItemList() {
         itemscfg.set("items", null);
-
-        int c = 0;
-
-        for (int i = 0; i < itemslist.size(); i++) {
-            itemscfg.set("items." + c + ".player", playerlist.get(itemslist.get(i)));
-            itemscfg.set("items." + c + ".item", itemslist.get(i));
-            c++;
-        }
+        itemscfg.set("items", itemslist);
 
         try {
             itemscfg.save(items);
@@ -122,9 +131,9 @@ public class ItemList {
 
     public int playerItemCount(Player player) {
         int count = 0;
-        for (ItemStack i : playerlist.keySet()) {
-            OfflinePlayer p = playerlist.get(i);
-            if (p != null && p.getName().equals(player.getName())) {
+        for (CustomItem i : itemslist) {
+            UUID uuid = i.getCreatorUUID();
+            if (uuid != null && uuid.equals(player.getUniqueId())) {
                 count += Collections.frequency(itemslist, i);
             }
         }

@@ -395,19 +395,16 @@ public class ItemCreatorListener implements Listener {
                 if (main.itemlistlistener.currentlyEditing.containsKey(player)) {
                     event.setCancelled(true);
 
-                    ItemStack oldItem = main.itemlistlistener.currentlyEditing.get(player);
+                    CustomItem oldItem = main.itemlistlistener.currentlyEditing.get(player);
 
-                    main.itemlist.playerlist.remove(oldItem); //remove old item from player list
-                    main.itemlist.itemslist.set(main.itemlist.itemslist.indexOf(oldItem), citem); //replace old item with new item
+                    main.itemlist.itemslist.set(main.itemlist.itemslist.indexOf(oldItem), new CustomItem(citem, oldItem.creator)); //replace old item with new item
                     main.itemlistlistener.currentlyEditing.remove(player);
 
-                    main.itemlist.playerlist.put(citem, player); //save item to player list
                     player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
 
                     player.closeInventory();
                 } else if (main.itemlist.playerItemCount(player) < main.itemlist.maxItems || player.hasPermission("itemcreatorplus.nosavelimit") || main.itemlist.maxItems == -1) {
-                    main.itemlist.itemslist.add(citem);
-                    main.itemlist.playerlist.put(citem, player);
+                    main.itemlist.itemslist.add(new CustomItem(citem, player));
                     player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
                     event.setCancelled(true);
                 } else {
