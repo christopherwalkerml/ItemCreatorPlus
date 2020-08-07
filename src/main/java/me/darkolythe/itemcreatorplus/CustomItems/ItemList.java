@@ -91,8 +91,10 @@ public class ItemList {
                         i = itemscfg.getItemStack("items." + item + ".item");
                         p = (OfflinePlayer) itemscfg.get("items." + item + ".player");
                         List<String> plr = new ArrayList<>();
-                        plr.add(p.getName());
-                        plr.add(p.getUniqueId().toString());
+                        if (p != null) {
+                            plr.add(p.getName());
+                            plr.add(p.getUniqueId().toString());
+                        }
                         ci = new CustomItem(i, plr);
                     } else {
                         i = itemscfg.getItemStack("items." + item);

@@ -6,7 +6,7 @@
 
     <groupId>me.Darkolythe</groupId>
     <artifactId>ItemCreatorPlus</artifactId>
-    <version>1.10.3</version>
+    <version>1.10.5</version>
     <packaging>jar</packaging>
 
     <properties>

@@ -15,11 +15,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.material.MaterialData;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -96,17 +93,19 @@ public class ItemCreatorGUI {
         Enchantment[] enchants = Enchantment.values();
         Arrays.sort(enchants, Comparator.comparing(Enchantment::toString));
         for (Enchantment enchant : enchants) {
-            ItemStack i = new ItemStack(Material.BOOK, 1);
-            ItemMeta meta = i.getItemMeta();
-            meta.setLore(Arrays.asList(ChatColor.GOLD + WordUtils.capitalize(enchant.toString().split(",")[0].replace("Enchantment[minecraft:", "").replace("_", " ")),
-                    "", ChatColor.GRAY + "Left click to increase by 1", ChatColor.GRAY + "Right click to decrease by 1"));
-            i.setItemMeta(meta);
-            if (item.containsEnchantment(enchant)) {
-                i.addUnsafeEnchantment(enchant, item.getEnchantmentLevel(enchant));
-                i.setAmount(item.getEnchantmentLevel(enchant));
+            if (enchant.getClass().getPackage().getName().startsWith("org.bukkit")) {
+                ItemStack i = new ItemStack(Material.BOOK, 1);
+                ItemMeta meta = i.getItemMeta();
+                meta.setLore(Arrays.asList(ChatColor.GOLD + WordUtils.capitalize(enchant.toString().split(",")[0].replace("Enchantment[minecraft:", "").replace("_", " ")),
+                        "", ChatColor.GRAY + "Left click to increase by 1", ChatColor.GRAY + "Right click to decrease by 1"));
+                i.setItemMeta(meta);
+                if (item.containsEnchantment(enchant)) {
+                    i.addUnsafeEnchantment(enchant, item.getEnchantmentLevel(enchant));
+                    i.setAmount(item.getEnchantmentLevel(enchant));
+                }
+                gui.setItem(index, i);
+                index += 1;
             }
-            gui.setItem(index, i);
-            index += 1;
         }
         gui.setItem((((Enchantment.values().length / 9) + 2) * 9) - 1, createBackButton());
         player.openInventory(gui);
