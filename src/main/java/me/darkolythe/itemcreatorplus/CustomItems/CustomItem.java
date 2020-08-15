@@ -20,6 +20,11 @@ public class CustomItem implements ConfigurationSerializable {
     public CustomItem(ItemStack newItem, List<String> newCreator) {
         this.item = newItem;
         this.creator = newCreator;
+
+        if (newCreator.size() == 0) {
+            newCreator.add(null);
+            newCreator.add(null);
+        }
     }
 
     public String getCreatorName() {
