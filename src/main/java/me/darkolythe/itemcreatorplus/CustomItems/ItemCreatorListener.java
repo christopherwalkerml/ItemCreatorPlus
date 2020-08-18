@@ -119,11 +119,12 @@ public class ItemCreatorListener implements Listener {
             return;
         }
 
-        ItemStack pitem = event.getInventory().getItem((((Enchantment.values().length / 9) + 2) * 9) - 5);
-        if (event.getRawSlot() < ((Enchantment.values().length / 9) + 1) * 9 && event.getRawSlot() >= 0 && pitem != null) {
-            Enchantment[] enchants = Enchantment.values();
-            Arrays.sort(enchants, Comparator.comparing(Enchantment::toString));
-            Enchantment enchant = enchants[event.getRawSlot()];
+        ArrayList<Enchantment> enchants = main.maintools.getTrueEnchantments();
+
+        ItemStack pitem = event.getInventory().getItem((((enchants.size() / 9) + 2) * 9) - 5);
+        if (event.getRawSlot() < ((enchants.size() / 9) + 1) * 9 && event.getRawSlot() >= 0 && pitem != null) {
+            enchants.sort(Comparator.comparing(Enchantment::toString));
+            Enchantment enchant = enchants.get(event.getRawSlot());
             if (event.isLeftClick()) {
                 if (pitem.containsEnchantment(enchant)) {
                     pitem.addUnsafeEnchantment(enchant, pitem.getEnchantmentLevel(enchant) + 1);

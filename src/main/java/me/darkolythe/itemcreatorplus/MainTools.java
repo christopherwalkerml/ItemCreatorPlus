@@ -2,10 +2,12 @@ package me.darkolythe.itemcreatorplus;
 
 import me.darkolythe.itemcreatorplus.CustomItems.*;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class MainTools {
@@ -44,5 +46,15 @@ public class MainTools {
             return false;
         }
         return true;
+    }
+
+    public ArrayList<Enchantment> getTrueEnchantments() {
+        ArrayList<Enchantment> enchants = new ArrayList<>();
+        for (Enchantment enchant : Enchantment.values()) {
+            if (enchant.getClass().getPackage().getName().startsWith("org.bukkit")) {
+                enchants.add(enchant);
+            }
+        }
+        return enchants;
     }
 }

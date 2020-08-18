@@ -85,12 +85,7 @@ public class ItemCreatorGUI {
     }
 
     public void enchantGUI(Player player, ItemStack item) {
-        ArrayList<Enchantment> enchants = new ArrayList<>();
-        for (Enchantment enchant : Enchantment.values()) {
-            if (enchant.getClass().getPackage().getName().startsWith("org.bukkit")) {
-                enchants.add(enchant);
-            }
-        }
+        ArrayList<Enchantment> enchants = main.maintools.getTrueEnchantments();
 
         Inventory gui = Bukkit.getServer().createInventory(player, ((enchants.size() / 9) + 2) * 9, ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Enchantment GUI");
         int index = 0;
