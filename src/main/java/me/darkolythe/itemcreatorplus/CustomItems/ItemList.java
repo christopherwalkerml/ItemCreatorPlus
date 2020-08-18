@@ -37,23 +37,26 @@ public class ItemList {
 
         int i;
         for (i = 0; i < min(45, itemslist.size() - (page * 45)); i++) {
-            ItemStack item = itemslist.get(i + (page * 45)).item.clone();
-            ItemMeta itemmeta = item.getItemMeta();
-            List<String> lore = new ArrayList<>();
-            if (itemmeta.hasLore()) {
-                lore = itemmeta.getLore();
-            }
-            lore.add(ChatColor.GRAY + "---------------------");
-            lore.add(ChatColor.GRAY + "Left click to duplicate");
-            lore.add(ChatColor.GRAY + "Shift click to edit");
-            lore.add(ChatColor.GRAY + "Right click to delete");
-            lore.add(ChatColor.GRAY + "Created by: " + ChatColor.RED + ((itemslist.get(i).creator != null && itemslist.get(i).getCreatorName() != null)
-                                                                        ? itemslist.get(i).getCreatorName() : "Unknown"));
-            lore.add(ChatColor.GRAY + "---------------------");
-            itemmeta.setLore(lore);
-            item.setItemMeta(itemmeta);
+            if (itemslist.get(i + (page * 45)) != null) {
+                ItemStack item = itemslist.get(i + (page * 45)).item.clone();
+                ItemMeta itemmeta = item.getItemMeta();
+                List<String> lore = new ArrayList<>();
+                if (itemmeta.hasLore()) {
+                    lore = itemmeta.getLore();
+                }
+                lore.add(ChatColor.GRAY + "---------------------");
+                lore.add(ChatColor.GRAY + "Left click to duplicate");
 
-            gui.setItem(i, item);
+                lore.add(ChatColor.GRAY + "Shift click to edit");
+                lore.add(ChatColor.GRAY + "Right click to delete");
+                lore.add(ChatColor.GRAY + "Created by: " + ChatColor.RED + ((itemslist.get(i).creator != null && itemslist.get(i).getCreatorName() != null)
+                        ? itemslist.get(i).getCreatorName() : "Unknown"));
+                lore.add(ChatColor.GRAY + "---------------------");
+                itemmeta.setLore(lore);
+                item.setItemMeta(itemmeta);
+
+                gui.setItem(i, item);
+            }
         }
 
         if (itemslist.size() > (page * 45) + 45) {

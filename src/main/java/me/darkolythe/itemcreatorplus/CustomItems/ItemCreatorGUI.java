@@ -17,9 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class ItemCreatorGUI {
 
@@ -87,11 +85,18 @@ public class ItemCreatorGUI {
     }
 
     public void enchantGUI(Player player, ItemStack item) {
-        Inventory gui = Bukkit.getServer().createInventory(player, ((Enchantment.values().length / 9) + 2) * 9, ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Enchantment GUI");
+        ArrayList<Enchantment> enchants = new ArrayList<>();
+        for (Enchantment enchant : Enchantment.values()) {
+            if (enchant.getClass().getPackage().getName().startsWith("org.bukkit")) {
+                enchants.add(enchant);
+            }
+        }
+
+        Inventory gui = Bukkit.getServer().createInventory(player, ((enchants.size() / 9) + 2) * 9, ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Enchantment GUI");
         int index = 0;
-        gui.setItem((((Enchantment.values().length / 9) + 2) * 9) - 5, item);
-        Enchantment[] enchants = Enchantment.values();
-        Arrays.sort(enchants, Comparator.comparing(Enchantment::toString));
+        gui.setItem((((enchants.size() / 9) + 2) * 9) - 5, item);
+        enchants.sort(Comparator.comparing(Enchantment::toString));
+
         for (Enchantment enchant : enchants) {
             if (enchant.getClass().getPackage().getName().startsWith("org.bukkit")) {
                 ItemStack i = new ItemStack(Material.BOOK, 1);
@@ -107,7 +112,7 @@ public class ItemCreatorGUI {
                 index += 1;
             }
         }
-        gui.setItem((((Enchantment.values().length / 9) + 2) * 9) - 1, createBackButton());
+        gui.setItem((((enchants.size() / 9) + 2) * 9) - 1, createBackButton());
         player.openInventory(gui);
     }
 

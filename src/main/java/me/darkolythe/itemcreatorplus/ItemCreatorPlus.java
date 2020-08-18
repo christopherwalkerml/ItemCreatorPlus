@@ -3,7 +3,6 @@ package me.darkolythe.itemcreatorplus;
 import me.darkolythe.itemcreatorplus.CustomItems.*;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.*;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
