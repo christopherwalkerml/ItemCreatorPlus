@@ -32,7 +32,7 @@ public class CustomItem implements ConfigurationSerializable {
     }
 
     public UUID getCreatorUUID() {
-        return UUID.fromString(creator.get(1));
+        return (creator.get(1) != null ? UUID.fromString(creator.get(1)) : null);
     }
 
     @Override

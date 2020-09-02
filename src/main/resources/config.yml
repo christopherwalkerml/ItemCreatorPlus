@@ -5,3 +5,6 @@ fullchecking: false
 #users without the permission "itemcreatorplus.nosavelimit" will have a max amount of items that can be created
 #set this to -1 to have no saved item cap
 saveitemlimit: 5
+
+#setting this to false will stop showing the "You have been given" message on /icp give
+givemessage: true

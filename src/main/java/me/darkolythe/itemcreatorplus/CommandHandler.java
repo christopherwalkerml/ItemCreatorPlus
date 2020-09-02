@@ -7,7 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class CommandHandler implements CommandExecutor {
@@ -56,7 +55,9 @@ public class CommandHandler implements CommandExecutor {
                                                 || ChatColor.stripColor(metaName).equalsIgnoreCase(ChatColor.stripColor(name))
                                                 || containsAll(ChatColor.stripColor(metaName), name)) {
                                             main.maintools.giveItem(players, item.item);
-                                            players.sendMessage(main.prefix + ChatColor.GREEN + "You have been given " + meta.getDisplayName());
+                                            if (main.maintools.giveMessage) {
+                                                players.sendMessage(main.prefix + ChatColor.GREEN + "You have been given " + meta.getDisplayName());
+                                            }
                                             return true;
                                         }
                                     }

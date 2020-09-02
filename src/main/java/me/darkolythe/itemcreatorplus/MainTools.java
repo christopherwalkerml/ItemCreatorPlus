@@ -17,6 +17,8 @@ public class MainTools {
         this.main = plugin; //set it equal to an instance of main
     }
 
+    public boolean giveMessage = true;
+
     public void setUp() {
 
         main.itemcreatorgui = new ItemCreatorGUI(main);
@@ -38,6 +40,7 @@ public class MainTools {
         main.saveDefaultConfig();
         main.itemlist.maxItems = main.getConfig().getInt("saveitemlimit");
         main.itemmain.combinelevel = main.getConfig().getInt("combinelevel");
+        giveMessage = main.getConfig().getBoolean("givemessage");
         main.saveConfig();
     }
 
