@@ -8,3 +8,7 @@ saveitemlimit: 5
 
 #setting this to false will stop showing the "You have been given" message on /icp give
 givemessage: true
+
+#if set to true, player effects will stack. (ex: speed 3 + speed 3 = speed 4)
+#if set to false, the max effect will be applied (ex: speed 5 + speed 2 = speed 5)
+stackingeffects: true

@@ -224,13 +224,16 @@ public class ItemEffectListener implements Listener {
                                             if (l.contains(ChatColor.GRAY.toString() + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")))) {
                                                 if (l.replace(ChatColor.GRAY + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")) + " ", "").replaceAll("\\d", "").equals("")) {
                                                     int level = Integer.parseInt(l.replace(ChatColor.GRAY + WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")) + " ", ""));
-                                                    int pl = 0;
                                                     for (int j = 0; j < effects.size(); j++) {
                                                         if (effects.get(j).getType() == effect) {
-                                                            effects.set(j, new PotionEffect(effect, 1000000000, effects.get(j).getAmplifier() + 1, false, false, false));
+                                                            if (main.stackingeffects && effects.get(j).getAmplifier() == level - 1) {
+                                                                effects.set(j, new PotionEffect(effect, 1000000000, effects.get(j).getAmplifier() + 1, false, false, false));
+                                                            } else {
+                                                                effects.set(j, new PotionEffect(effect, 1000000000, Math.max(effects.get(j).getAmplifier(), level - 1), false, false, false));
+                                                            }
                                                         }
                                                     }
-                                                    PotionEffect pe = new PotionEffect(effect, 1000000000, level - 1 + pl, false, false, false);
+                                                    PotionEffect pe = new PotionEffect(effect, 1000000000, level - 1, false, false, false);
                                                     effects.add(pe);
                                                     break;
                                                 }
