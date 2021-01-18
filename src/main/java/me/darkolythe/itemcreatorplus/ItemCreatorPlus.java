@@ -15,6 +15,7 @@ public final class ItemCreatorPlus extends JavaPlugin {
     public ItemMain itemmain;
     public ItemList itemlist;
     public ItemListListener itemlistlistener;
+    public ItemPlaceListener itemplacelistener;
 
     public MainTools maintools;
 
@@ -31,8 +32,10 @@ public final class ItemCreatorPlus extends JavaPlugin {
         maintools = new MainTools(plugin);
         itemlist = new ItemList(plugin);
         itemlistlistener = new ItemListListener(plugin);
+        itemplacelistener = new ItemPlaceListener(plugin);
 
         getServer().getPluginManager().registerEvents(itemlistlistener, this);
+        getServer().getPluginManager().registerEvents(itemplacelistener, this);
 
         maintools.setUp();
         itemlist.setUp();
@@ -43,6 +46,8 @@ public final class ItemCreatorPlus extends JavaPlugin {
         stackingeffects = getConfig().getBoolean("stackingeffects");
 
         Metrics metrics = new Metrics(plugin);
+
+        saveDefaultConfig();
 
         System.out.println(prefix + "ItemCreatorPlus Enabled!");
     }

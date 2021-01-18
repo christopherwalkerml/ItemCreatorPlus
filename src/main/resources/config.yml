@@ -12,3 +12,6 @@ givemessage: true
 #if set to true, player effects will stack. (ex: speed 3 + speed 3 = speed 4)
 #if set to false, the max effect will be applied (ex: speed 5 + speed 2 = speed 5)
 stackingeffects: true
+
+#if an item has this line of lore on it, it cannot be placed
+noplace: '&cCannot be placed'
