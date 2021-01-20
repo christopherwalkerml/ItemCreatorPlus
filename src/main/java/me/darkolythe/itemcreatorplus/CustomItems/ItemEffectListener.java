@@ -109,17 +109,25 @@ public class ItemEffectListener implements Listener {
                             for (String l : lore) {
                                 if (l.contains(ChatColor.RED + "-")) {
                                     String[] data = l.split(" ");
+                                    int dat_len = data.length;
 
-                                    int level = Integer.parseInt(data[data.length - 1]);
+                                    int duration = 3;
+                                    int level_index = 1;
+                                    if (data[dat_len - 1].contains("s")) {
+                                        duration = Integer.parseInt(ChatColor.stripColor(data[dat_len - 1].replace("s", "")));
+                                        level_index = 2;
+                                    }
+
+                                    int level = Integer.parseInt(data[dat_len - level_index]);
                                     String effect_str = "";
-                                    for (int i = 1; i < data.length - 1; i++) {
+                                    for (int i = 1; i < dat_len - level_index; i++) {
                                         effect_str += data[i] + " ";
                                     }
                                     effect_str = ChatColor.stripColor(effect_str.trim());
 
                                     for (PotionEffectType effect: PotionEffectType.values()) {
                                         if (effect_str.equals(WordUtils.capitalize(effect.getName().toLowerCase().replace("_", " ")))) {
-                                            PotionEffect pe = new PotionEffect(effect, 60, level - 1, false, true, false);
+                                            PotionEffect pe = new PotionEffect(effect, duration * 20, level - 1, false, true, false);
                                             entity.addPotionEffect(pe);
                                             break;
                                         }
