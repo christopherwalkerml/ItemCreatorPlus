@@ -61,6 +61,7 @@ public class ItemListListener implements Listener {
                         } else if (event.isRightClick() && !event.isShiftClick()) { //DELETE ITEM
                             if (isCreatedByUser(invItem, player)) {
                                 main.itemlist.itemslist.remove(trueslot);
+                                main.itemlist.saveItemList();
                                 event.setCancelled(true);
                                 main.itemlist.openItemList(player, (byte) 0);
                             } else {

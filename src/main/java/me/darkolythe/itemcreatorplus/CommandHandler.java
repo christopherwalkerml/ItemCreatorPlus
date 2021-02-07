@@ -31,6 +31,11 @@ public class CommandHandler implements CommandExecutor {
                                 player.sendMessage(main.prefix + ChatColor.RED + "Invalid permission");
                             }
                             return true;
+                        } else if (args[0].equals("reload")) {
+                            main.itemlist.setUp();
+                            main.itemlist.importItemList();
+                            player.sendMessage(main.prefix + ChatColor.GREEN + "Reloaded items from config");
+                            return true;
                         }
                     }
                 } else {
