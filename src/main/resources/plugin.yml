@@ -1,5 +1,5 @@
 name: ItemCreatorPlus
-version: 1.13.2
+version: 1.13.3
 author: Darkolythe
 main: me.darkolythe.itemcreatorplus.ItemCreatorPlus
 api-version: 1.13
@@ -49,4 +49,7 @@ permissions:
     default: op
   itemcreatorplus.editoverride:
     description: allows the user to edit any items that weren't made by them (works for items made by "Unknown")
+    default: op
+  itemcreatorplus.reload:
+    description: allows the user to reload the items list
     default: op

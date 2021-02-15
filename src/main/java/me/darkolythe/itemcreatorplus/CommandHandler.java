@@ -32,9 +32,13 @@ public class CommandHandler implements CommandExecutor {
                             }
                             return true;
                         } else if (args[0].equals("reload")) {
-                            main.itemlist.setUp();
-                            main.itemlist.importItemList();
-                            sender.sendMessage(main.prefix + ChatColor.GREEN + "Reloaded items from config");
+                            if (player.hasPermission("itemcreatorplus.reload")) {
+                                main.itemlist.setUp();
+                                main.itemlist.importItemList();
+                                sender.sendMessage(main.prefix + ChatColor.GREEN + "Reloaded items from config");
+                            } else {
+                                player.sendMessage(main.prefix + ChatColor.RED + "Invalid permission");
+                            }
                             return true;
                         }
                     }
