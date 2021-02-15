@@ -34,7 +34,7 @@ public class CommandHandler implements CommandExecutor {
                         } else if (args[0].equals("reload")) {
                             main.itemlist.setUp();
                             main.itemlist.importItemList();
-                            player.sendMessage(main.prefix + ChatColor.GREEN + "Reloaded items from config");
+                            sender.sendMessage(main.prefix + ChatColor.GREEN + "Reloaded items from config");
                             return true;
                         }
                     }
@@ -83,8 +83,15 @@ public class CommandHandler implements CommandExecutor {
         } else if (args.length > 0 && args[0].equals("give")) {
             sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name");
         } else if (args.length == 1) {
+            if (args[0].equals("reload")) {
+                main.itemlist.setUp();
+                main.itemlist.importItemList();
+                sender.sendMessage(main.prefix + ChatColor.GREEN + "Reloaded items from config");
+                return true;
+            }
             sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp [items, give]");
         }
+        sender.sendMessage(main.prefix + "You cannot use that command as the console.");
         return true;
     }
 
