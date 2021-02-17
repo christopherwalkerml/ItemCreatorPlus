@@ -105,6 +105,8 @@ public class CommandHandler implements CommandExecutor {
             }
             sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp [items, give]");
             return true;
+        } else if (args.length == 0) {
+            sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name [amount]");
         }
         sender.sendMessage(main.prefix + "You cannot use that command as the console.");
         return true;
