@@ -53,7 +53,7 @@ public class ItemListListener implements Listener {
                         ItemStack invItem = event.getCurrentItem();
                         if (event.isLeftClick() && !event.isShiftClick()) { //GIVE ITEM
                             if (player.hasPermission("itemcreatorplus.giveitem")) {
-                                main.maintools.giveItem(player, item.item);
+                                main.maintools.giveItem(player, item.item, 1);
                                 event.setCancelled(true);
                             } else {
                                 player.sendMessage(main.prefix + ChatColor.RED + "You do not have permission to do that");
