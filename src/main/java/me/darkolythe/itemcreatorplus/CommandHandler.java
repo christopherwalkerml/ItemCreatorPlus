@@ -66,9 +66,9 @@ public class CommandHandler implements CommandExecutor {
                                             int amt = 1;
                                             if (args.length == 4) {
                                                 try {
-                                                    amt = Integer.getInteger(args[3]);
+                                                    amt = Integer.parseInt(args[3]);
                                                 } catch (Exception e) {
-                                                    sender.sendMessage(main.prefix + ChatColor.RED + "Invalid Item Amount");
+                                                    sender.sendMessage(main.prefix + ChatColor.RED + "Item amount must be a number");
                                                     return true;
                                                 }
                                             }
