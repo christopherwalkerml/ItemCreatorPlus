@@ -95,6 +95,7 @@ public class CommandHandler implements CommandExecutor {
             }
         } else if (args.length > 0 && args[0].equals("give")) {
             sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name [amount]");
+            return true;
         } else if (args.length == 1) {
             if (args[0].equals("reload")) {
                 main.itemlist.setUp();
@@ -103,6 +104,7 @@ public class CommandHandler implements CommandExecutor {
                 return true;
             }
             sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp [items, give]");
+            return true;
         }
         sender.sendMessage(main.prefix + "You cannot use that command as the console.");
         return true;
