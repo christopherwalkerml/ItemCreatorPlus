@@ -182,14 +182,15 @@ public class ItemEffectListener implements Listener {
 
         if (main.fullchecking) {
             for (int i = 0; i < 42; i++) {
+                System.out.println(i + " " + player.getInventory().getItem(i));
                 slots.put(i, player.getInventory().getItem(i));
             }
         } else {
             for (int i = 36; i < 41; i++) {
+                System.out.println(i + " " + player.getInventory().getItem(i));
                 slots.put(i, player.getInventory().getItem(i));
             }
             slots.put(0, player.getInventory().getItemInMainHand());
-            slots.put(1, player.getInventory().getItemInOffHand());
         }
 
         return slots;
