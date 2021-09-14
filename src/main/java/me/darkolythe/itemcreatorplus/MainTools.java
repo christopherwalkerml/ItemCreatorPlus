@@ -44,9 +44,11 @@ public class MainTools {
         main.saveConfig();
     }
 
-    public boolean giveItem(Player player, ItemStack item) {
-        if (player.getInventory().addItem(item).keySet().size() != 0) {
-            return false;
+    public boolean giveItem(Player player, ItemStack item, int amt) {
+        for (int i = 0; i < amt; i++) {
+            if (player.getInventory().addItem(item).keySet().size() != 0) {
+                return false;
+            }
         }
         return true;
     }

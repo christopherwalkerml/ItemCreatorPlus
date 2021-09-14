@@ -403,10 +403,15 @@ public class ItemCreatorListener implements Listener {
 
                     player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
 
+                    main.itemlist.saveItemList();
+
                     player.closeInventory();
                 } else if (main.itemlist.playerItemCount(player) < main.itemlist.maxItems || player.hasPermission("itemcreatorplus.nosavelimit") || main.itemlist.maxItems == -1) {
                     main.itemlist.itemslist.add(new CustomItem(citem, player));
                     player.sendMessage(main.prefix + ChatColor.GREEN + "Item saved successfully");
+
+                    main.itemlist.saveItemList();
+
                     event.setCancelled(true);
                 } else {
                     player.sendMessage(main.prefix + ChatColor.RED + "You cannot save any more items!");

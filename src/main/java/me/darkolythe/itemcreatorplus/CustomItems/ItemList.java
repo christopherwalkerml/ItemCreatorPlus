@@ -78,6 +78,7 @@ public class ItemList {
     }
 
     public void importItemList() {
+        itemslist = new ArrayList<>();
         if (itemscfg.contains("items")) {
             Object identifier = itemscfg.get("items");
             if (identifier instanceof List) {
@@ -116,7 +117,7 @@ public class ItemList {
         try {
             itemscfg.save(items);
         } catch (IOException e) {
-
+            System.out.println("Could not save items");
         }
     }
 

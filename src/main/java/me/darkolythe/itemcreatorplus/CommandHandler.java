@@ -31,6 +31,15 @@ public class CommandHandler implements CommandExecutor {
                                 player.sendMessage(main.prefix + ChatColor.RED + "Invalid permission");
                             }
                             return true;
+                        } else if (args[0].equals("reload")) {
+                            if (player.hasPermission("itemcreatorplus.reload")) {
+                                main.itemlist.setUp();
+                                main.itemlist.importItemList();
+                                sender.sendMessage(main.prefix + ChatColor.GREEN + "Reloaded items from config");
+                            } else {
+                                player.sendMessage(main.prefix + ChatColor.RED + "Invalid permission");
+                            }
+                            return true;
                         }
                     }
                 } else {
@@ -39,7 +48,7 @@ public class CommandHandler implements CommandExecutor {
                 }
             }
         }
-        if (args.length == 3) {
+        if (args.length == 3 || args.length == 4) {
             if (sender.hasPermission("itemcreatorplus.giveitem")) {
                 if (args[0].equals("give")) {
                     for (Player players : Bukkit.getServer().getOnlinePlayers()) {
@@ -54,7 +63,16 @@ public class CommandHandler implements CommandExecutor {
                                         if (metaName.equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', name))
                                                 || ChatColor.stripColor(metaName).equalsIgnoreCase(ChatColor.stripColor(name))
                                                 || containsAll(ChatColor.stripColor(metaName), name)) {
-                                            main.maintools.giveItem(players, item.item);
+                                            int amt = 1;
+                                            if (args.length == 4) {
+                                                try {
+                                                    amt = Integer.parseInt(args[3]);
+                                                } catch (Exception e) {
+                                                    sender.sendMessage(main.prefix + ChatColor.RED + "Item amount must be a number");
+                                                    return true;
+                                                }
+                                            }
+                                            main.maintools.giveItem(players, item.item, amt);
                                             if (main.maintools.giveMessage) {
                                                 players.sendMessage(main.prefix + ChatColor.GREEN + "You have been given " + meta.getDisplayName());
                                             }
@@ -70,16 +88,28 @@ public class CommandHandler implements CommandExecutor {
                     sender.sendMessage(main.prefix + ChatColor.RED + "Player " + args[1] + " not found.");
                     return true;
                 } else {
-                    sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name");
+                    sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name [amount]");
                 }
             } else {
                 sender.sendMessage(main.prefix + ChatColor.RED + "Invalid permission");
             }
         } else if (args.length > 0 && args[0].equals("give")) {
-            sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name");
+            sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name [amount]");
+            return true;
         } else if (args.length == 1) {
+            if (args[0].equals("reload")) {
+                main.itemlist.setUp();
+                main.itemlist.importItemList();
+                sender.sendMessage(main.prefix + ChatColor.GREEN + "Reloaded items from config");
+                return true;
+            }
             sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp [items, give]");
+            return true;
+        } else if (args.length == 0) {
+            sender.sendMessage(main.prefix + ChatColor.RED + "Invalid command. Usage: /icp give player your_item_name [amount]");
+            return true;
         }
+        sender.sendMessage(main.prefix + "You cannot use that command as the console.");
         return true;
     }
 
